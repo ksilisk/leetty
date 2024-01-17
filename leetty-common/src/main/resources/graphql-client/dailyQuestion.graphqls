@@ -1,0 +1,35 @@
+type DailyCodingQuestion
+@annotate(name: "HasJsonRootWrapper", type: "annotation")
+@annotate(name: "JsonTypeName", type: "jackson", inputs: {value: "activeDailyCodingChallengeQuestion"})
+{
+    date: String
+    userStatus: String
+    link: String
+    question: Question
+}
+
+type Question {
+    questionId: Int
+    questionFrontendId: Int
+    acRate: Float
+    difficulty: String
+    freqBar: String
+    isFavor: String
+    isPaidOnly: String
+    status: String
+    title: String
+    titleSlug: String
+    hasVideoSolution: String
+    hasSolution: String
+    content: String
+    likes: Int
+    dislikes: Int
+    categoryTitle: String
+    topicTags: [TopicTag]
+}
+
+type TopicTag {
+    name: String
+    id: String
+    slug: String
+}
