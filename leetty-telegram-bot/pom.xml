@@ -16,6 +16,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.ksilisk.leetty</groupId>
             <artifactId>leetty-common</artifactId>
             <version>1.0</version>
