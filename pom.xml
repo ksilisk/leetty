@@ -25,6 +25,7 @@
         <graphql.dgs.version>8.2.0</graphql.dgs.version>
         <dgs.codegen.shared.core.version>6.1.2</dgs.codegen.shared.core.version>
         <maven.surefire.plugin.version>3.2.2</maven.surefire.plugin.version>
+        <telegram.bots.api.version>6.8.0</telegram.bots.api.version>
     </properties>
 
     <modules>
@@ -95,7 +96,11 @@
                 <artifactId>flyway-core</artifactId>
                 <version>${flyway.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots</artifactId>
+                <version>${telegram.bots.api.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
