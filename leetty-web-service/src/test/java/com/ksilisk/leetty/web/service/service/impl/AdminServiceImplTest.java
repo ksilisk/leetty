@@ -1,6 +1,6 @@
 package com.ksilisk.leetty.web.service.service.impl;
 
-import com.ksilisk.leetty.common.payload.AdminInfo;
+import com.ksilisk.leetty.common.dto.AdminDto;
 import com.ksilisk.leetty.web.service.repository.AdminRepository;
 import com.ksilisk.leetty.web.service.service.AdminService;
 import org.junit.jupiter.api.Assertions;
@@ -13,26 +13,38 @@ import java.util.List;
 
 @DataJpaTest
 class AdminServiceImplTest {
-    @Autowired
-    AdminRepository adminRepository;
+    final AdminRepository adminRepository;
+    final AdminService adminService;
 
-    @Test
-    public void addAndGetAdminInfos_thenGetCorrectly() {
-        // given
-        AdminService adminService = new AdminServiceImpl(adminRepository);
-        List<AdminInfo> adminInfos = List.of(new AdminInfo(12345), new AdminInfo(89234));
-        // when
-        adminInfos.forEach(adminService::addAdmin);
-        // then
-        Assertions.assertIterableEquals(adminInfos, adminService.getAdmins());
+    @Autowired
+    public AdminServiceImplTest(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+        this.adminService = new AdminServiceImpl(adminRepository);
     }
 
     @Test
-    public void addNonUniqueUserId_shouldThrowException() {
+    void addAndGetAdminInfos_thenGetCorrectly() {
         // given
-        AdminService adminService = new AdminServiceImpl(adminRepository);
-        List<AdminInfo> adminInfos = List.of(new AdminInfo(111), new AdminInfo(111));
+        List<AdminDto> adminDtos = List.of(new AdminDto(12345L), new AdminDto(89234L));
+        // when
+        adminDtos.forEach(adminService::addAdmin);
         // then
-        Assertions.assertThrowsExactly(DataIntegrityViolationException.class, () -> adminInfos.forEach(adminService::addAdmin));
+        Assertions.assertIterableEquals(adminDtos, adminService.getAdmins());
+    }
+
+    @Test
+    void addNonUniqueUserId_shouldThrowException() {
+        // given
+        List<AdminDto> adminDtos = List.of(new AdminDto(111L), new AdminDto(111L));
+        // then
+        Assertions.assertThrowsExactly(DataIntegrityViolationException.class, () -> adminDtos.forEach(adminService::addAdmin));
+    }
+
+    @Test
+    void addAdminWithUserIdNull_shouldThrowException() {
+        // given
+        AdminDto adminDto = AdminDto.builder().build();
+        // then
+        Assertions.assertThrows(RuntimeException.class, () -> adminService.addAdmin(adminDto));
     }
 }

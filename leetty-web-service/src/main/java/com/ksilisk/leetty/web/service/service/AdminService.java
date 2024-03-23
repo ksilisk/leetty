@@ -1,11 +1,11 @@
 package com.ksilisk.leetty.web.service.service;
 
-import com.ksilisk.leetty.common.payload.AdminInfo;
+import com.ksilisk.leetty.common.dto.AdminDto;
 
 import java.util.List;
 
 public interface AdminService {
-    List<AdminInfo> getAdmins();
+    List<AdminDto> getAdmins();
 
-    void addAdmin(AdminInfo admin);
+    void addAdmin(AdminDto admin);
 }
