@@ -1,0 +1,6 @@
+%d. <b><a href="https://leetcode.com%s">%s</a></b>
+
+%s
+Difficulty: <tg-spoiler><b>%s</b></tg-spoiler>
+Topics: <tg-spoiler><b>%s</b></tg-spoiler>
+Acceptance: <tg-spoiler><i>%.1f%%</i></tg-spoiler>
