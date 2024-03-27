@@ -68,6 +68,9 @@ services:
   postgres:
     container_name: ${POSTGRES_CONTAINER_NAME}
     image: postgres:${POSTGRES_IMAGE_VERSION}
+    command:
+      - "-c"
+      - "config_file=/conf/postgresql.conf"
     environment:
       POSTGRES_DB: ${LEETTY_POSTGRES_DB_SECRET}
       POSTGRES_PASSWORD: ${LEETTY_POSTGRES_PASSWORD_SECRET}
@@ -75,13 +78,13 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ${POSTGRES_CONFIG_FILE}:/var/lib/postgresql/data/pgdata/postgresql.conf
+      - ${POSTGRES_CONFIG_FILE}:/conf/postgresql.conf
     ports:
       - ${POSTGRES_CONTAINER_PORT}:${POSTGRES_CONTAINER_PORT}
     expose:
       - ${POSTGRES_CONTAINER_PORT}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${LEETTY_POSTGRES_USER_SECRET} -d ${LEETTY_POSTGRES_DB_SECRET}" ]
       interval: 10s
       timeout: 5s
       retries: 5
