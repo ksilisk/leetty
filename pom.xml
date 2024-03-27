@@ -89,6 +89,14 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.version}</version>
+                    <configuration>
+                        <image>
+                            <env>
+                                <BP_JVM_VERSION>17</BP_JVM_VERSION>
+                                <BP_JVM_TYPE>JDK</BP_JVM_TYPE>
+                            </env>
+                        </image>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>io.github.deweyjose</groupId>
