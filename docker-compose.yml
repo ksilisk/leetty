@@ -1,0 +1,99 @@
+version: "3"
+
+services:
+  leetty-telegram-bot:
+    container_name: ${LEETTY_TELEGRAM_BOT_CONTAINER_NAME}
+    image: leetty-telegram-bot:${LEETTY_VERSION}
+    environment:
+      JAVA_TOOL_OPTIONS: ${LEETTY_TELEGRAM_BOT_JAVA_TOOL_OPTIONS}
+      LEETTY_TELEGRAM_BOT_PORT: ${LEETTY_TELEGRAM_BOT_PORT}
+      LEETTY_AUTH_SERVICE_URL: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}:${LEETTY_AUTH_SERVICE_PORT}
+      LEETTY_WEB_SERVICE_URL: ${LEETTY_WEB_SERVICE_CONTAINER_NAME}:${LEETTY_WEB_SERVICE_PORT}
+      REDIS_URL: ${REDIS_CONTAINER_NAME}:${REDIS_CONTAINER_PORT}
+    volumes:
+      - ${LEETTY_TELEGRAM_BOT_PROPERTIES_PATH}:/conf/application-prod.yml
+    ports:
+      - ${LEETTY_TELEGRAM_BOT_PORT}:${LEETTY_TELEGRAM_BOT_PORT}
+    expose:
+      - ${LEETTY_TELEGRAM_BOT_PORT}
+    depends_on:
+      - redis
+      - leetty-web-service
+      - leetty-auth-service
+  leetty-auth-service:
+    container_name: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}
+    image: leetty-auth-service:${LEETTY_VERSION}
+    environment:
+      JAVA_TOOL_OPTIONS: ${LEETTY_WEB_SERVICE_JAVA_TOOL_OPTIONS}
+      LEETTY_AUTH_SERVICE_PORT: ${LEETTY_AUTH_SERVICE_PORT}
+      LEETTY_AUTH_SERVICE_HOST: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}
+    volumes:
+      - ${LEETTY_AUTH_SERVICE_PROPERTIES_PATH}:/conf/application-prod.yml
+    ports:
+      - ${LEETTY_AUTH_SERVICE_PORT}:${LEETTY_AUTH_SERVICE_PORT}
+    expose:
+      - ${LEETTY_AUTH_SERVICE_PORT}
+  leetty-web-service:
+    container_name: ${LEETTY_WEB_SERVICE_CONTAINER_NAME}
+    image: leetty-web-service:${LEETTY_VERSION}
+    environment:
+      POSTGRES_URL: ${POSTGRES_CONTAINER_NAME}:${POSTGRES_CONTAINER_PORT}
+      JAVA_TOOL_OPTIONS: ${LEETTY_AUTH_SERVICE_JAVA_TOOL_OPTIONS}
+      LEETTY_WEB_SERVICE_PORT: ${LEETTY_WEB_SERVICE_PORT}
+      LEETTY_AUTH_SERVICE_URL: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}:${LEETTY_AUTH_SERVICE_PORT}
+      POSTGRES_USER: ${LEETTY_POSTGRES_USER_SECRET}
+      POSTGRES_PASSWORD: ${LEETTY_POSTGRES_PASSWORD_SECRET}
+      POSTGRES_DB: ${LEETTY_POSTGRES_DB_SECRET}
+    volumes:
+      - ${LEETTY_WEB_SERVICE_PROPERTIES_PATH}:/conf/application-prod.yml
+    depends_on:
+      - leetty-auth-service
+      - postgres
+    ports:
+      - ${LEETTY_WEB_SERVICE_PORT}:${LEETTY_WEB_SERVICE_PORT}
+    expose:
+      - ${LEETTY_WEB_SERVICE_PORT}
+  redis:
+    container_name: ${REDIS_CONTAINER_NAME}
+    image: redis:${REDIS_IMAGE_VERSION}
+    volumes:
+      - redis-data:/data
+      - ${REDIS_CONFIG_FILE}:/conf/redis.conf
+    ports:
+      - ${REDIS_CONTAINER_PORT}:${REDIS_CONTAINER_PORT}
+    expose:
+      - ${REDIS_CONTAINER_PORT}
+    command:
+      - "/conf/redis.conf"
+  postgres:
+    container_name: ${POSTGRES_CONTAINER_NAME}
+    image: postgres:${POSTGRES_IMAGE_VERSION}
+    environment:
+      POSTGRES_DB: ${LEETTY_POSTGRES_DB_SECRET}
+      POSTGRES_PASSWORD: ${LEETTY_POSTGRES_PASSWORD_SECRET}
+      POSTGRES_USER: ${LEETTY_POSTGRES_USER_SECRET}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ${POSTGRES_CONFIG_FILE}:/var/lib/postgresql/data/pgdata/postgresql.conf
+    ports:
+      - ${POSTGRES_CONTAINER_PORT}:${POSTGRES_CONTAINER_PORT}
+    expose:
+      - ${POSTGRES_CONTAINER_PORT}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+volumes:
+  postgres-data:
+    name: ${LEETTY_POSTGRES_VOLUME_NAME}
+  redis-data:
+    name: ${LEETTY_REDIS_VOLUME_NAME}
