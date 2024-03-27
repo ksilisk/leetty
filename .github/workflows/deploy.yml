@@ -1,0 +1,25 @@
+name: Deploy Leetty Project
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  prepare-env:
+    runs-on: self-hosted
+    needs: [run_tests]
+    steps:
+      - name: Docker down
+        run: docker compose down
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Build images
+        run: mvn clean spring-boot:build-image
+  deploy:
+    needs: [prepare-env]
+    runs-on: self-hosted
+    steps:
+      - name: Create Leetty version file
+        run: echo "LEETTY_VERSION=${GITHUB_REF:11}" > .leetty_version_env
+      - name: Run created images
+        run: docker compose --env-file=${DOCKER_ENV_FILE} --env-file=.leetty_version_env up -d
