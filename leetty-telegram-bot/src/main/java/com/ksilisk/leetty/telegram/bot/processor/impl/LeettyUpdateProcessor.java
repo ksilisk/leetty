@@ -4,7 +4,7 @@ import com.ksilisk.leetty.telegram.bot.command.LeettyBotCommand;
 import com.ksilisk.leetty.telegram.bot.config.LeettyProperties.Bot;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.processor.UpdateProcessor;
-import com.ksilisk.leetty.telegram.bot.service.CallbackData;
+import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import com.ksilisk.leetty.telegram.bot.state.LeettyBotStates;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.MessageHeaders;

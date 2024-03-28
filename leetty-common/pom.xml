@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.ksilisk.leetty</groupId>
         <artifactId>leetty-parent</artifactId>
-        <version>1.0</version>
+        <version>${leetty.project.version}</version>
     </parent>
     <artifactId>leetty-common</artifactId>
     <version>${parent.version}</version>

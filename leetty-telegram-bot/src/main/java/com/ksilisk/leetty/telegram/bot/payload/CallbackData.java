@@ -1,4 +1,4 @@
-package com.ksilisk.leetty.telegram.bot.service;
+package com.ksilisk.leetty.telegram.bot.payload;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

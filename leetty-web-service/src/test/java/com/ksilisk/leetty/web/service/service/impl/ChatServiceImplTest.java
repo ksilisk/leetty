@@ -75,6 +75,18 @@ class ChatServiceImplTest {
     }
 
     @Test
+    void updateExistsChat_whenUpdatedValueIsEmpty_shouldUpdateAndBeEmpty() {
+        // given
+        Chat existsChat = Chat.builder().chatId(1L).dailySendTime("10:00").build();
+        chatRepository.save(existsChat);
+        ChatDto updateChat = ChatDto.builder().chatId(1L).dailySendTime("").build();
+        // when
+        chatService.update(updateChat);
+        // then
+        Assertions.assertEquals("", chatService.getChat(1L).dailySendTime());
+    }
+
+    @Test
     void addChatWithNullChatId_shouldThrowException() {
         // given
         ChatDto chatDto = ChatDto.builder().build();
