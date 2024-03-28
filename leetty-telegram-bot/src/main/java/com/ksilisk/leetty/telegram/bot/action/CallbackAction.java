@@ -1,6 +1,6 @@
 package com.ksilisk.leetty.telegram.bot.action;
 
-import com.ksilisk.leetty.telegram.bot.service.CallbackData;
+import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import org.springframework.statemachine.StateContext;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

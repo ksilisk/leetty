@@ -6,12 +6,13 @@
 
     <groupId>com.ksilisk.leetty</groupId>
     <artifactId>leetty-parent</artifactId>
-    <version>1.0</version>
+    <version>${leetty.project.version}</version>
     <name>leetty</name>
 
     <packaging>pom</packaging>
 
     <properties>
+        <leetty.project.version>1.1</leetty.project.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring.boot.version>3.2.1</spring.boot.version>

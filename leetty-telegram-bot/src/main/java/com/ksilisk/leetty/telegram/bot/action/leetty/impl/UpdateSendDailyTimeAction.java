@@ -2,9 +2,9 @@ package com.ksilisk.leetty.telegram.bot.action.leetty.impl;
 
 import com.ksilisk.leetty.telegram.bot.action.leetty.LeettyCallbackAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
+import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import com.ksilisk.leetty.telegram.bot.sender.Sender;
 import com.ksilisk.leetty.telegram.bot.sender.SenderResolver;
-import com.ksilisk.leetty.telegram.bot.service.CallbackData;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -24,6 +24,8 @@ import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.UPDATE_SEND_D
 @Component
 public class UpdateSendDailyTimeAction implements LeettyCallbackAction {
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+    private static final String DISABLE_SENDING_DAILY_DATA = "";
+
     public static List<LocalTime> TIMES_TO_SEND = List.of(
             LocalTime.of(10, 0),
             LocalTime.of(14, 0),
@@ -54,16 +56,23 @@ public class UpdateSendDailyTimeAction implements LeettyCallbackAction {
     }
 
     private ReplyKeyboard replyKeyboard() {
-        List<InlineKeyboardButton> buttons = TIMES_TO_SEND.stream()
+        InlineKeyboardButton disableSendingButton = InlineKeyboardButton.builder()
+                .text("Отключить отправку!")
+                .callbackData(new CallbackData(SET_SEND_DAILY_TIME,
+                        Map.of(TIME_CALLBACK_DATA_KEY, DISABLE_SENDING_DAILY_DATA)).toString())
+                .build();
+        List<InlineKeyboardButton> timeButtons = TIMES_TO_SEND.stream()
                 .map(time -> time.format(TIME_FORMATTER))
                 .map(time -> InlineKeyboardButton.builder()
                         .text(time)
-                        .callbackData(new CallbackData(SET_SEND_DAILY_TIME, Map.of(TIME_CALLBACK_DATA_KEY, time)).toString())
+                        .callbackData(new CallbackData(SET_SEND_DAILY_TIME,
+                                Map.of(TIME_CALLBACK_DATA_KEY, time)).toString())
                         .build())
                 .toList();
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(List.of(buttons.get(0), buttons.get(1)))
-                .keyboardRow(List.of(buttons.get(2), buttons.get(3)))
+                .keyboardRow(List.of(timeButtons.get(0), timeButtons.get(1)))
+                .keyboardRow(List.of(timeButtons.get(2), timeButtons.get(3)))
+                .keyboardRow(List.of(disableSendingButton))
                 .build();
     }
 }

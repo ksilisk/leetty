@@ -4,7 +4,7 @@ import com.ksilisk.leetty.telegram.bot.action.leetty.LeettyAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.sender.Sender;
 import com.ksilisk.leetty.telegram.bot.sender.SenderResolver;
-import com.ksilisk.leetty.telegram.bot.service.CallbackData;
+import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
