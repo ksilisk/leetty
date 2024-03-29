@@ -42,11 +42,15 @@ public class ScheduledSendDailyQuestion implements Closeable {
     @PostConstruct
     public void addTimesToSchedule() {
         TIMES_TO_SEND.forEach(time -> {
-            Duration nextRun = Duration.between(LocalTime.now(zoneId), time);
-            if (time.isBefore(LocalTime.now())) {
+            LocalTime now = LocalTime.now(zoneId);
+            Duration nextRun = Duration.between(now, time);
+            if (time.isBefore(now)) {
                 nextRun = nextRun.plusDays(1);
             }
-            executorService.scheduleAtFixedRate(() -> sendAll(time), nextRun.toSeconds(), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(() -> sendAll(time),
+                    nextRun.toSeconds(),
+                    TimeUnit.DAYS.toSeconds(1),
+                    TimeUnit.SECONDS);
         });
     }
 
