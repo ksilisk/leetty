@@ -3,24 +3,20 @@ package com.ksilisk.leetty.telegram.bot.service.impl;
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.TopicTag;
 import com.ksilisk.leetty.telegram.bot.service.DailyQuestionMessagePreparer;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class DailyQuestionMessagePreparerImpl implements DailyQuestionMessagePreparer {
-    private final String messageFormat;
+    private static final String MESSAGE_FORMAT_SAMPLE_FILENAME = "daily_question_format.txt";
 
-    public DailyQuestionMessagePreparerImpl(
-            @Value("classpath:messages/daily_question_format.txt") Resource messageFormatResource) throws IOException {
-        this.messageFormat = messageFormatResource.getContentAsString(StandardCharsets.UTF_8);
-    }
+    private final MessageSampleReader messageSampleReader;
 
     public SendMessage prepareMessage(DailyCodingQuestion dailyCodingQuestion, Long chatId) {
         return SendMessage.builder()
@@ -32,7 +28,7 @@ public class DailyQuestionMessagePreparerImpl implements DailyQuestionMessagePre
     }
 
     private String prepareDailyQuestionText(DailyCodingQuestion dailyCodingQuestion) {
-        return String.format(messageFormat,
+        return String.format(messageSampleReader.read(MESSAGE_FORMAT_SAMPLE_FILENAME),
                 dailyCodingQuestion.getQuestion().getQuestionFrontendId(),
                 dailyCodingQuestion.getLink(),
                 dailyCodingQuestion.getQuestion().getTitle(),
