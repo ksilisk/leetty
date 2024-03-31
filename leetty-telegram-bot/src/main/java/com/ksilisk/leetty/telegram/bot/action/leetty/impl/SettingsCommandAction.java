@@ -2,11 +2,10 @@ package com.ksilisk.leetty.telegram.bot.action.leetty.impl;
 
 import com.ksilisk.leetty.telegram.bot.action.leetty.LeettyAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
+import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import com.ksilisk.leetty.telegram.bot.sender.Sender;
 import com.ksilisk.leetty.telegram.bot.sender.SenderResolver;
-import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,28 +13,27 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.UPDATE_SEND_DAILY_TIME;
 
 @Component
 public class SettingsCommandAction implements LeettyAction {
-    private final Sender sender;
-    private final String messageText;
+    private static final String SETTINGS_MESSAGE_SAMPLE_FILENAME = "settings_message.txt";
 
-    public SettingsCommandAction(@Value("classpath:messages/settings_message.txt") Resource messageResource,
-                                 SenderResolver senderResolver) throws IOException {
+    private final Sender sender;
+    private final MessageSampleReader messageSampleReader;
+
+    public SettingsCommandAction(MessageSampleReader messageSampleReader, SenderResolver senderResolver) {
         this.sender = senderResolver.getSender(getBot());
-        this.messageText = messageResource.getContentAsString(StandardCharsets.UTF_8);
+        this.messageSampleReader = messageSampleReader;
     }
 
     @Override
     public void execute(Update update) {
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
-                .text(messageText)
+                .text(messageSampleReader.read(SETTINGS_MESSAGE_SAMPLE_FILENAME))
                 .replyMarkup(getKeyboard())
                 .build();
         sender.execute(sendMessage);
