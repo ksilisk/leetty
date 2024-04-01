@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public void addUser(@RequestBody UserDto userDto) {
-        userService.addUser(userDto);
+    @PutMapping
+    public void putUser(@RequestBody UserDto userDto) {
+        userService.putUser(userDto);
     }
 
     @GetMapping("/{id}")

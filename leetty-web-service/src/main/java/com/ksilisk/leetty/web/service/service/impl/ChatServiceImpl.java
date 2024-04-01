@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksilisk.leetty.common.dto.ChatDto;
 import com.ksilisk.leetty.web.service.entity.Chat;
-import com.ksilisk.leetty.web.service.exception.EntityAlreadyExistsException.ChatAlreadyExistsException;
 import com.ksilisk.leetty.web.service.exception.EntityNotFoundException.ChatNotFoundException;
 import com.ksilisk.leetty.web.service.repository.ChatRepository;
 import com.ksilisk.leetty.web.service.service.ChatService;
@@ -12,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
@@ -41,14 +38,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Transactional
-    public void addChat(ChatDto chatDto) {
-        Optional<Chat> chat = chatRepository.findById(chatDto.chatId());
-        if (chat.isEmpty()) {
-            Chat newChat = OM.convertValue(chatDto, Chat.class);
-            chatRepository.save(newChat);
-        } else {
-            throw new ChatAlreadyExistsException();
-        }
+    public void putChat(ChatDto chatDto) {
+        Chat newChat = OM.convertValue(chatDto, Chat.class);
+        chatRepository.save(newChat);
     }
 
     @Override

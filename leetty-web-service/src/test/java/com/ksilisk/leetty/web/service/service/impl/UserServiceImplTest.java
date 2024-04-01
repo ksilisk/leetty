@@ -1,7 +1,7 @@
 package com.ksilisk.leetty.web.service.service.impl;
 
 import com.ksilisk.leetty.common.dto.UserDto;
-import com.ksilisk.leetty.web.service.exception.EntityAlreadyExistsException.UserAlreadyExistsException;
+import com.ksilisk.leetty.web.service.entity.User;
 import com.ksilisk.leetty.web.service.exception.EntityNotFoundException.UserNotFountException;
 import com.ksilisk.leetty.web.service.repository.UserRepository;
 import com.ksilisk.leetty.web.service.service.UserService;
@@ -27,19 +27,21 @@ class UserServiceImplTest {
         UserDto userDto = UserDto.builder().userId(1L).username("some")
                 .firstName("some").build();
         // when
-        userService.addUser(userDto);
+        userService.putUser(userDto);
         // then
         Assertions.assertEquals(userDto, userService.getUser(1L));
     }
 
     @Test
-    void addExistsUser_shouldThrowException() {
+    void addExistsUser_shouldOverwrite() {
         // given
         UserDto userDto = UserDto.builder().userId(1L).secondName("test").build();
+        User existsUser = User.builder().userId(1L).build();
+        userRepository.save(existsUser);
         // when
-        userService.addUser(userDto);
+        userService.putUser(userDto);
         // then
-        Assertions.assertThrowsExactly(UserAlreadyExistsException.class, () -> userService.addUser(userDto));
+        Assertions.assertEquals(userDto, userService.getUser(1L));
     }
 
     @Test
@@ -47,7 +49,7 @@ class UserServiceImplTest {
         // given
         UserDto userDto = UserDto.builder().build();
         // then
-        Assertions.assertThrows(RuntimeException.class, () -> userService.addUser(userDto));
+        Assertions.assertThrows(RuntimeException.class, () -> userService.putUser(userDto));
     }
 
     @Test
