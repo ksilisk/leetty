@@ -3,15 +3,12 @@ package com.ksilisk.leetty.web.service.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksilisk.leetty.common.dto.UserDto;
 import com.ksilisk.leetty.web.service.entity.User;
-import com.ksilisk.leetty.web.service.exception.EntityAlreadyExistsException.UserAlreadyExistsException;
 import com.ksilisk.leetty.web.service.exception.EntityNotFoundException.UserNotFountException;
 import com.ksilisk.leetty.web.service.repository.UserRepository;
 import com.ksilisk.leetty.web.service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
@@ -24,14 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void addUser(UserDto userDto) {
-        Optional<User> user = userRepository.findById(userDto.userId());
-        if (user.isEmpty()) {
-            User newUser = OM.convertValue(userDto, User.class);
-            userRepository.save(newUser);
-        } else {
-            throw new UserAlreadyExistsException();
-        }
+    public void putUser(UserDto userDto) {
+        User newUser = OM.convertValue(userDto, User.class);
+        userRepository.save(newUser);
     }
 
     @Override

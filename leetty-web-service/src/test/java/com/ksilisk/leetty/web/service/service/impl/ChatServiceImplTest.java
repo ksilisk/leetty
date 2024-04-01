@@ -2,7 +2,6 @@ package com.ksilisk.leetty.web.service.service.impl;
 
 import com.ksilisk.leetty.common.dto.ChatDto;
 import com.ksilisk.leetty.web.service.entity.Chat;
-import com.ksilisk.leetty.web.service.exception.EntityAlreadyExistsException.ChatAlreadyExistsException;
 import com.ksilisk.leetty.web.service.exception.EntityNotFoundException.ChatNotFoundException;
 import com.ksilisk.leetty.web.service.repository.ChatRepository;
 import com.ksilisk.leetty.web.service.service.ChatService;
@@ -23,13 +22,14 @@ class ChatServiceImplTest {
     }
 
     @Test
-    void addExistsChat_shouldThrowException() {
+    void addExistsChat_shouldOverwrite() {
         // given
         ChatDto chatDto = ChatDto.builder().chatId(1L).description("desc").title("title").build();
-        Chat chat = Chat.builder().chatId(1L).description("desc").title("title").build();
+        Chat chat = Chat.builder().chatId(1L).build();
         chatRepository.save(chat);
         // then
-        Assertions.assertThrowsExactly(ChatAlreadyExistsException.class, () -> chatService.addChat(chatDto));
+        chatService.putChat(chatDto);
+        Assertions.assertEquals(chatDto, chatService.getChat(1L));
     }
 
     @Test
@@ -37,7 +37,7 @@ class ChatServiceImplTest {
         // given
         ChatDto chatDto = ChatDto.builder().chatId(1L).description("desc").title("title").build();
         // when
-        chatService.addChat(chatDto);
+        chatService.putChat(chatDto);
         // then
         Assertions.assertEquals(chatDto, chatService.getChat(1L));
     }
@@ -91,6 +91,6 @@ class ChatServiceImplTest {
         // given
         ChatDto chatDto = ChatDto.builder().build();
         // then
-        Assertions.assertThrows(RuntimeException.class, () -> chatService.addChat(chatDto));
+        Assertions.assertThrows(RuntimeException.class, () -> chatService.putChat(chatDto));
     }
 }

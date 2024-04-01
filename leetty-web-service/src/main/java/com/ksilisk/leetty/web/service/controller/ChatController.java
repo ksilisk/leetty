@@ -22,8 +22,8 @@ public class ChatController {
         chatService.update(chatDto);
     }
 
-    @PostMapping
-    public void addChar(@RequestBody ChatDto chatDto) {
-        chatService.addChat(chatDto);
+    @PutMapping
+    public void putChat(@RequestBody ChatDto chatDto) {
+        chatService.putChat(chatDto);
     }
 }
