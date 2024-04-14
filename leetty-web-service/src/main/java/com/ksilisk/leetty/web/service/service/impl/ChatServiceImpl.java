@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksilisk.leetty.common.dto.ChatDto;
 import com.ksilisk.leetty.web.service.entity.Chat;
-import com.ksilisk.leetty.web.service.exception.EntityNotFoundException.ChatNotFoundException;
+import com.ksilisk.leetty.web.service.exception.type.EntityNotFoundException.ChatNotFoundException;
 import com.ksilisk.leetty.web.service.repository.ChatRepository;
 import com.ksilisk.leetty.web.service.service.ChatService;
 import lombok.RequiredArgsConstructor;

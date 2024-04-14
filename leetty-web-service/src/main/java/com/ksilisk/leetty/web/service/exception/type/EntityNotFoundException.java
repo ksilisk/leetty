@@ -1,6 +1,8 @@
-package com.ksilisk.leetty.web.service.exception;
+package com.ksilisk.leetty.web.service.exception.type;
 
-public class EntityNotFoundException extends RuntimeException {
+import com.ksilisk.leetty.web.service.exception.LeettyWebServiceException;
+
+public class EntityNotFoundException extends LeettyWebServiceException {
     public EntityNotFoundException(String message) {
         super(message);
     }
