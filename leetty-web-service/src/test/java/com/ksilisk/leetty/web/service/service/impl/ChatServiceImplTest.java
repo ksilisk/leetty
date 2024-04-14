@@ -2,7 +2,7 @@ package com.ksilisk.leetty.web.service.service.impl;
 
 import com.ksilisk.leetty.common.dto.ChatDto;
 import com.ksilisk.leetty.web.service.entity.Chat;
-import com.ksilisk.leetty.web.service.exception.EntityNotFoundException.ChatNotFoundException;
+import com.ksilisk.leetty.web.service.exception.type.EntityNotFoundException.ChatNotFoundException;
 import com.ksilisk.leetty.web.service.repository.ChatRepository;
 import com.ksilisk.leetty.web.service.service.ChatService;
 import org.junit.jupiter.api.Assertions;

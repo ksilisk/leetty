@@ -1,6 +1,8 @@
-package com.ksilisk.leetty.web.service.exception;
+package com.ksilisk.leetty.web.service.exception.type;
 
-public class EntityAlreadyExistsException extends RuntimeException {
+import com.ksilisk.leetty.web.service.exception.LeettyWebServiceException;
+
+public class EntityAlreadyExistsException extends LeettyWebServiceException {
     public EntityAlreadyExistsException(String message) {
         super(message);
     }

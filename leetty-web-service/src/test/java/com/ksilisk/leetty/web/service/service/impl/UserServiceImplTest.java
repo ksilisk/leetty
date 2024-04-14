@@ -2,7 +2,7 @@ package com.ksilisk.leetty.web.service.service.impl;
 
 import com.ksilisk.leetty.common.dto.UserDto;
 import com.ksilisk.leetty.web.service.entity.User;
-import com.ksilisk.leetty.web.service.exception.EntityNotFoundException.UserNotFountException;
+import com.ksilisk.leetty.web.service.exception.type.EntityNotFoundException.UserNotFountException;
 import com.ksilisk.leetty.web.service.repository.UserRepository;
 import com.ksilisk.leetty.web.service.service.UserService;
 import org.junit.jupiter.api.Assertions;
