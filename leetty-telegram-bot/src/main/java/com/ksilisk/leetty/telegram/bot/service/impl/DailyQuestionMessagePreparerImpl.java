@@ -56,6 +56,8 @@ public class DailyQuestionMessagePreparerImpl implements DailyQuestionMessagePre
                 .replaceAll("&nbsp;", "")
                 .replaceAll("<pre>", "")
                 .replaceAll("</pre>", "")
+                .replaceAll("</ol>", "")
+                .replaceAll("<ol>", "")
                 .replaceAll("\\t", "")
                 .replaceAll("<sub>", "(")
                 .replaceAll("</sub>", ")")
