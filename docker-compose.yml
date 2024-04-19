@@ -20,6 +20,9 @@ services:
       - redis
       - leetty-web-service
       - leetty-auth-service
+    networks:
+      - main_network
+      - leetty_network
     restart: always
   leetty-auth-service:
     container_name: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}
@@ -34,6 +37,8 @@ services:
       - ${LEETTY_AUTH_SERVICE_PORT}:${LEETTY_AUTH_SERVICE_PORT}
     expose:
       - ${LEETTY_AUTH_SERVICE_PORT}
+    networks:
+      - leetty_network
     restart: always
   leetty-web-service:
     container_name: ${LEETTY_WEB_SERVICE_CONTAINER_NAME}
@@ -56,6 +61,8 @@ services:
     expose:
       - ${LEETTY_WEB_SERVICE_PORT}
     restart: always
+    networks:
+      - leetty_network
   redis:
     container_name: ${REDIS_CONTAINER_NAME}
     image: redis:${REDIS_IMAGE_VERSION}
@@ -69,6 +76,8 @@ services:
     command:
       - "/conf/redis.conf"
     restart: always
+    networks:
+      - leetty_network
   postgres:
     container_name: ${POSTGRES_CONTAINER_NAME}
     image: postgres:${POSTGRES_IMAGE_VERSION}
@@ -87,6 +96,8 @@ services:
       - ${POSTGRES_CONTAINER_PORT}:${POSTGRES_CONTAINER_PORT}
     expose:
       - ${POSTGRES_CONTAINER_PORT}
+    networks:
+      - leetty_network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${LEETTY_POSTGRES_USER_SECRET} -d ${LEETTY_POSTGRES_DB_SECRET}" ]
       interval: 10s
@@ -104,3 +115,11 @@ volumes:
     name: ${LEETTY_POSTGRES_VOLUME_NAME}
   redis-data:
     name: ${LEETTY_REDIS_VOLUME_NAME}
+
+networks:
+  main_network:
+    external: true
+    name: ${MAIN_HOST_NETWORK_NAME}
+  leetty_network:
+    external: true
+    name: ${LEETTY_APPLICATION_NETWORK_NAME}

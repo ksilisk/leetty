@@ -27,6 +27,6 @@ class LeettyWebhookHandler extends WebhookHandler {
 
     @Override
     public String getBotPath() {
-        return null;
+        return Bot.LEETTY.name();
     }
 }
