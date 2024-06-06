@@ -19,4 +19,4 @@ jobs:
       - name: Create Leetty version file
         run: echo "LEETTY_VERSION=${GITHUB_REF:11}" > .leetty_version_env
       - name: Run created images
-        run: docker compose --env-file=${DOCKER_ENV_FILE} --env-file=.leetty_version_env up -d --force-recreate
+        run: docker compose -p leetty --env-file=${DOCKER_ENV_FILE} --env-file=.leetty_version_env up -d --force-recreate
