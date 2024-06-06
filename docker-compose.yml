@@ -20,6 +20,7 @@ services:
       - redis
       - leetty-web-service
       - leetty-auth-service
+    restart: always
   leetty-auth-service:
     container_name: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}
     image: leetty-auth-service:${LEETTY_VERSION}
@@ -33,6 +34,7 @@ services:
       - ${LEETTY_AUTH_SERVICE_PORT}:${LEETTY_AUTH_SERVICE_PORT}
     expose:
       - ${LEETTY_AUTH_SERVICE_PORT}
+    restart: always
   leetty-web-service:
     container_name: ${LEETTY_WEB_SERVICE_CONTAINER_NAME}
     image: leetty-web-service:${LEETTY_VERSION}
@@ -53,6 +55,7 @@ services:
       - ${LEETTY_WEB_SERVICE_PORT}:${LEETTY_WEB_SERVICE_PORT}
     expose:
       - ${LEETTY_WEB_SERVICE_PORT}
+    restart: always
   redis:
     container_name: ${REDIS_CONTAINER_NAME}
     image: redis:${REDIS_IMAGE_VERSION}
@@ -65,6 +68,7 @@ services:
       - ${REDIS_CONTAINER_PORT}
     command:
       - "/conf/redis.conf"
+    restart: always
   postgres:
     container_name: ${POSTGRES_CONTAINER_NAME}
     image: postgres:${POSTGRES_IMAGE_VERSION}
@@ -88,7 +92,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    restart: always
     deploy:
       resources:
         limits:
