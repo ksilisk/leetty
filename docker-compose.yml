@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   leetty-telegram-bot:
     container_name: ${LEETTY_TELEGRAM_BOT_CONTAINER_NAME}
@@ -17,10 +15,21 @@ services:
     expose:
       - ${LEETTY_TELEGRAM_BOT_PORT}
     depends_on:
-      - redis
-      - leetty-web-service
-      - leetty-auth-service
+      redis:
+        condition: service_healthy
+      leetty-web-service:
+        condition: service_healthy
+      leetty-auth-service:
+        condition: service_healthy
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f -s localhost:${LEETTY_TELEGRAM_BOT_PORT}/actuator/health | grep UP" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - leetty_network
+      - monitoring_network
   leetty-auth-service:
     container_name: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}
     image: leetty-auth-service:${LEETTY_VERSION}
@@ -35,6 +44,14 @@ services:
     expose:
       - ${LEETTY_AUTH_SERVICE_PORT}
     restart: always
+    networks:
+      - leetty_network
+      - monitoring_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -s localhost:${LEETTY_AUTH_SERVICE_PORT}/actuator/health | grep UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   leetty-web-service:
     container_name: ${LEETTY_WEB_SERVICE_CONTAINER_NAME}
     image: leetty-web-service:${LEETTY_VERSION}
@@ -49,13 +66,23 @@ services:
     volumes:
       - ${LEETTY_WEB_SERVICE_PROPERTIES_PATH}:/conf/application-prod.yml
     depends_on:
-      - leetty-auth-service
-      - postgres
+      postgres:
+        condition: service_healthy
+      leetty-auth-service:
+        condition: service_healthy
     ports:
       - ${LEETTY_WEB_SERVICE_PORT}:${LEETTY_WEB_SERVICE_PORT}
     expose:
       - ${LEETTY_WEB_SERVICE_PORT}
     restart: always
+    networks:
+      - monitoring_network
+      - leetty_network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f -s localhost:${LEETTY_WEB_SERVICE_PORT}/actuator/health | grep UP" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   redis:
     container_name: ${REDIS_CONTAINER_NAME}
     image: redis:${REDIS_IMAGE_VERSION}
@@ -69,6 +96,14 @@ services:
     command:
       - "/conf/redis.conf"
     restart: always
+    networks:
+      - monitoring_network
+      - leetty_network
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -p ${REDIS_CONTAINER_PORT} ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   postgres:
     container_name: ${POSTGRES_CONTAINER_NAME}
     image: postgres:${POSTGRES_IMAGE_VERSION}
@@ -88,11 +123,14 @@ services:
     expose:
       - ${POSTGRES_CONTAINER_PORT}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${LEETTY_POSTGRES_USER_SECRET} -d ${LEETTY_POSTGRES_DB_SECRET}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${LEETTY_POSTGRES_USER_SECRET} -d ${LEETTY_POSTGRES_DB_SECRET} -p ${POSTGRES_CONTAINER_PORT}" ]
       interval: 10s
       timeout: 5s
       retries: 5
     restart: always
+    networks:
+      - monitoring_network
+      - leetty_network
     deploy:
       resources:
         limits:
@@ -104,3 +142,11 @@ volumes:
     name: ${LEETTY_POSTGRES_VOLUME_NAME}
   redis-data:
     name: ${LEETTY_REDIS_VOLUME_NAME}
+
+networks:
+  leetty_network:
+    name: ${LEETTY_NETWORK_NAME}
+    external: true
+  monitoring_network:
+    name: ${MONITORING_NETWORK_NAME}
+    external: true
