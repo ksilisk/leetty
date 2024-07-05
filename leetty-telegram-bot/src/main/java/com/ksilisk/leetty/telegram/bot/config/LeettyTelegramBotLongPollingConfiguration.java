@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnProperty(prefix = "leetty", name = "webhook.enabled", havingValue = "false", matchIfMissing = true)
+@Profile({"dev", "prod"})
 public class LeettyTelegramBotLongPollingConfiguration {
     @Bean
     @ConditionalOnMissingBean({TelegramBotsApi.class})

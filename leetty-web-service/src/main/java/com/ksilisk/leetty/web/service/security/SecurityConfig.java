@@ -1,4 +1,4 @@
-package com.ksilisk.leetty.web.service.config;
+package com.ksilisk.leetty.web.service.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

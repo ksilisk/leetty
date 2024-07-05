@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: "test"
+  data:
+    redis:
+      port: 6479
+leetty:
+  bot-properties:
+    LEETTY:
+      token: "test_token"
+      username: "test_bot"
+  web-service-url: "http://localhost:8181"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

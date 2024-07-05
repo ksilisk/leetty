@@ -24,6 +24,8 @@
         <maven.surefire.plugin.version>3.2.2</maven.surefire.plugin.version>
         <telegram.bots.api.version>6.9.7.1</telegram.bots.api.version>
         <spring.statemachine.version>4.0.0</spring.statemachine.version>
+        <spring.plugin.image.builder>docker.io/paketobuildpacks/builder-jammy-full:0.3.369</spring.plugin.image.builder>
+        <spring.plugin.image.runImage>docker.io/paketobuildpacks/run-jammy-full:0.1.41</spring.plugin.image.runImage>
     </properties>
 
     <modules>
@@ -96,7 +98,8 @@
                                 <BP_JVM_VERSION>17</BP_JVM_VERSION>
                                 <BP_JVM_TYPE>JDK</BP_JVM_TYPE>
                             </env>
-                            <builder>docker.io/paketobuildpacks/builder-jammy-full:latest</builder>
+                            <builder>${spring.plugin.image.builder}</builder>
+                            <runImage>${spring.plugin.image.runImage}</runImage>
                         </image>
                     </configuration>
                 </plugin>
