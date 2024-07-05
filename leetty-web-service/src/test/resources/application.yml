@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: "test"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "test"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

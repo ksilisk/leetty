@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: "test"
+  security:
+    oauth2:
+      authorizationserver:
+        client:
+          test-client:
+            registration:
+              client-secret: "{noop}test"
+              client-id: "test"
+              client-authentication-methods:
+                - "client_secret_basic"
+              authorization-grant-types:
+                - "password"
+        issuer: "http://test.test"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

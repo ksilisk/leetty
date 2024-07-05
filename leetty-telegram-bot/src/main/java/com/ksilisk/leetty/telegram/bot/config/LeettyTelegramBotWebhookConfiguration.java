@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnProperty(prefix = "leetty", name = "webhook.enabled", havingValue = "true")
+@Profile({"dev", "prod"})
 public class LeettyTelegramBotWebhookConfiguration {
 
     @Bean
