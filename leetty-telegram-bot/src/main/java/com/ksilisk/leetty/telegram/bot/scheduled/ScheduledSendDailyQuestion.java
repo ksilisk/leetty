@@ -2,10 +2,9 @@ package com.ksilisk.leetty.telegram.bot.scheduled;
 
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.telegram.bot.config.LeettyProperties;
-import com.ksilisk.leetty.telegram.bot.sender.Sender;
-import com.ksilisk.leetty.telegram.bot.sender.SenderResolver;
-import com.ksilisk.leetty.telegram.bot.service.DailyQuestionMessagePreparer;
+import com.ksilisk.leetty.telegram.bot.util.DailyQuestionMessagePreparer;
 import com.ksilisk.leetty.telegram.bot.service.LeettyBotService;
+import com.ksilisk.telegram.bot.starter.sender.Sender;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,23 +17,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.ksilisk.leetty.telegram.bot.action.leetty.impl.UpdateSendDailyTimeAction.TIMES_TO_SEND;
-import static com.ksilisk.leetty.telegram.bot.config.LeettyProperties.Bot.LEETTY;
+import static com.ksilisk.leetty.telegram.bot.action.impl.UpdateSendDailyTimeAction.TIMES_TO_SEND;
 
 @Slf4j
 @Component
 public class ScheduledSendDailyQuestion implements Closeable {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-
     private final ZoneId zoneId;
     private final LeettyBotService leettyBotService;
     private final Sender sender;
     private final DailyQuestionMessagePreparer dailyQuestionMessagePreparer;
 
     public ScheduledSendDailyQuestion(LeettyBotService leettyBotService, LeettyProperties leettyProperties,
-                                      SenderResolver senderResolver, DailyQuestionMessagePreparer dailyQuestionMessagePreparer) {
+                                      Sender sender, DailyQuestionMessagePreparer dailyQuestionMessagePreparer) {
         this.leettyBotService = leettyBotService;
-        this.sender = senderResolver.getSender(LEETTY);
+        this.sender = sender;
         this.dailyQuestionMessagePreparer = dailyQuestionMessagePreparer;
         this.zoneId = leettyProperties.getZoneId();
     }

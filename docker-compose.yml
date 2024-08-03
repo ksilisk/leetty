@@ -9,7 +9,7 @@ services:
       LEETTY_WEB_SERVICE_URL: ${LEETTY_WEB_SERVICE_CONTAINER_NAME}:${LEETTY_WEB_SERVICE_PORT}
       REDIS_URL: ${REDIS_CONTAINER_NAME}:${REDIS_CONTAINER_PORT}
     volumes:
-      - ${LEETTY_TELEGRAM_BOT_PROPERTIES_PATH}:/conf/application-prod.yml
+      - ${LEETTY_TELEGRAM_BOT_CONFIGS_PATH}:/conf
     ports:
       - ${LEETTY_TELEGRAM_BOT_PORT}:${LEETTY_TELEGRAM_BOT_PORT}
     expose:
@@ -38,7 +38,7 @@ services:
       LEETTY_AUTH_SERVICE_PORT: ${LEETTY_AUTH_SERVICE_PORT}
       LEETTY_AUTH_SERVICE_HOST: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}
     volumes:
-      - ${LEETTY_AUTH_SERVICE_PROPERTIES_PATH}:/conf/application-prod.yml
+      - ${LEETTY_AUTH_SERVICE_CONFIGS_PATH}:/conf
     ports:
       - ${LEETTY_AUTH_SERVICE_PORT}:${LEETTY_AUTH_SERVICE_PORT}
     expose:
@@ -64,7 +64,7 @@ services:
       POSTGRES_PASSWORD: ${LEETTY_POSTGRES_PASSWORD_SECRET}
       POSTGRES_DB: ${LEETTY_POSTGRES_DB_SECRET}
     volumes:
-      - ${LEETTY_WEB_SERVICE_PROPERTIES_PATH}:/conf/application-prod.yml
+      - ${LEETTY_WEB_SERVICE_CONFIGS_PATH}:/conf
     depends_on:
       postgres:
         condition: service_healthy
