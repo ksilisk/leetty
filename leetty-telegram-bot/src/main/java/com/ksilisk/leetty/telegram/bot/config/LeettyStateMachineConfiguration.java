@@ -1,8 +1,9 @@
 package com.ksilisk.leetty.telegram.bot.config;
 
-import com.ksilisk.leetty.telegram.bot.action.Action;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.state.LeettyBotStates;
+import com.ksilisk.telegram.bot.starter.action.Action;
+import com.ksilisk.telegram.bot.starter.config.StateMachineConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineFactory;
@@ -20,7 +21,7 @@ import static com.ksilisk.leetty.telegram.bot.state.LeettyBotStates.INITIAL;
 import static com.ksilisk.leetty.telegram.bot.state.LeettyBotStates.WAIT_NEW_COMMAND;
 
 @EnableStateMachineFactory(name = "leettyBotStateMachineFactory")
-class LeettyStateMachineConfiguration extends AbstractStateMachineConfiguration<LeettyBotStates, LeettyBotEvent> {
+class LeettyStateMachineConfiguration extends StateMachineConfiguration<LeettyBotStates, LeettyBotEvent> {
     protected LeettyStateMachineConfiguration(RedisStateMachineRepository stateMachineRepository,
                                               List<Action<LeettyBotStates, LeettyBotEvent>> actionList) {
         super(stateMachineRepository, actionList);

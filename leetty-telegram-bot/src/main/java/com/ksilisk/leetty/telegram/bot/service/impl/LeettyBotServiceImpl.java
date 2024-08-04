@@ -3,9 +3,9 @@ package com.ksilisk.leetty.telegram.bot.service.impl;
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.dto.ChatDto;
 import com.ksilisk.leetty.common.dto.UserDto;
-import com.ksilisk.leetty.telegram.bot.client.ChatClient;
-import com.ksilisk.leetty.telegram.bot.client.DailyQuestionClient;
-import com.ksilisk.leetty.telegram.bot.client.UserClient;
+import com.ksilisk.leetty.telegram.bot.feign.ChatClient;
+import com.ksilisk.leetty.telegram.bot.feign.DailyQuestionClient;
+import com.ksilisk.leetty.telegram.bot.feign.UserClient;
 import com.ksilisk.leetty.telegram.bot.service.LeettyBotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.ksilisk.leetty.telegram.bot.action.leetty.impl.UpdateSendDailyTimeAction.TIME_FORMATTER;
+import static com.ksilisk.leetty.telegram.bot.action.impl.UpdateSendDailyTimeAction.TIME_FORMATTER;
 
 @Service
 @RequiredArgsConstructor

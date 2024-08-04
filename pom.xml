@@ -33,6 +33,7 @@
         <module>leetty-web-service</module>
         <module>leetty-auth-service</module>
         <module>leetty-common</module>
+        <module>telegram-bot-spring-boot-starter</module>
     </modules>
 
     <dependencyManagement>
