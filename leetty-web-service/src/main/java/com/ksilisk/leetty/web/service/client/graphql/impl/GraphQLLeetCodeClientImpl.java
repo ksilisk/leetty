@@ -16,6 +16,6 @@ public class GraphQLLeetCodeClientImpl implements GraphQLLeetCodeClient {
     public <T> T execute(GraphQLQuery query, BaseSubProjectionNode<?, ?> projection, Class<T> clazz) {
         GraphQLQueryRequest request = new GraphQLQueryRequest(query, projection);
         GraphQLResponse response = client.executeQuery(request.serialize());
-        return response.dataAsObject(clazz);
+        return response.extractValueAsObject(query.getOperationName(), clazz);
     }
 }

@@ -5,6 +5,7 @@ import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -17,16 +18,12 @@ import java.util.Collections;
 import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.UPDATE_SEND_DAILY_TIME;
 
 @Component
+@RequiredArgsConstructor
 public class SettingsCommandAction implements LeettyAction {
     private static final String SETTINGS_MESSAGE_SAMPLE_FILENAME = "settings_message.txt";
 
     private final Sender sender;
     private final MessageSampleReader messageSampleReader;
-
-    public SettingsCommandAction(MessageSampleReader messageSampleReader, Sender sender) {
-        this.sender = sender;
-        this.messageSampleReader = messageSampleReader;
-    }
 
     @Override
     public void execute(Update update) {

@@ -82,6 +82,11 @@ class LeettyStateMachineConfiguration extends StateMachineConfiguration<LeettyBo
                 .withInternal()
                 .source(WAIT_NEW_COMMAND)
                 .event(UPDATE_SEND_DAILY_TIME)
-                .action(eventActionMap.get(UPDATE_SEND_DAILY_TIME));
+                .action(eventActionMap.get(UPDATE_SEND_DAILY_TIME))
+                .and()
+                .withInternal()
+                .source(WAIT_NEW_COMMAND)
+                .event(INLINE_QUERY_COMMAND)
+                .action(eventActionMap.get(INLINE_QUERY_COMMAND));
     }
 }

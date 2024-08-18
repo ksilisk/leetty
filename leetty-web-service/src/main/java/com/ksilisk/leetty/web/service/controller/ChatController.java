@@ -5,6 +5,8 @@ import com.ksilisk.leetty.web.service.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/chats")
@@ -25,5 +27,10 @@ public class ChatController {
     @PutMapping
     public void putChat(@RequestBody ChatDto chatDto) {
         chatService.putChat(chatDto);
+    }
+
+    @GetMapping("/daily-question")
+    public List<Long> getChatsToSendDaily(@RequestParam("time") String time) {
+        return chatService.getChatsToSendDaily(time);
     }
 }

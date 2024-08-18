@@ -1,41 +1,52 @@
 package com.ksilisk.leetty.telegram.bot.util.impl;
 
-import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
+import com.ksilisk.leetty.common.codegen.types.Question;
 import com.ksilisk.leetty.common.codegen.types.TopicTag;
-import com.ksilisk.leetty.telegram.bot.util.DailyQuestionMessagePreparer;
+import com.ksilisk.leetty.telegram.bot.util.LeetCodeQuestionMessagePreparer;
 import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class DailyQuestionMessagePreparerImpl implements DailyQuestionMessagePreparer {
+public class LeetCodeQuestionMessagePreparerImpl implements LeetCodeQuestionMessagePreparer {
     private static final String MESSAGE_FORMAT_SAMPLE_FILENAME = "daily_question_format.txt";
+    private static final String LEETCODE_QUESTION_URL_FORMAT = "https://leetcode.com/problems/%s/description/";
 
     private final MessageSampleReader messageSampleReader;
 
-    public SendMessage prepareMessage(DailyCodingQuestion dailyCodingQuestion, Long chatId) {
+    public SendMessage prepareMessage(Question leetCodeQuestion, Long chatId) {
         return SendMessage.builder()
                 .chatId(chatId)
-                .text(prepareDailyQuestionText(dailyCodingQuestion))
+                .text(prepareQuestionText(leetCodeQuestion))
                 .disableWebPagePreview(true)
                 .parseMode("HTML")
                 .build();
     }
 
-    private String prepareDailyQuestionText(DailyCodingQuestion dailyCodingQuestion) {
+    @Override
+    public InputTextMessageContent prepareMessageContent(Question leetCodeQuestion) {
+        return InputTextMessageContent.builder()
+                .messageText(prepareQuestionText(leetCodeQuestion))
+                .parseMode("HTML")
+                .disableWebPagePreview(true)
+                .build();
+    }
+
+    private String prepareQuestionText(Question leetCodeQuestion) {
         return String.format(messageSampleReader.read(MESSAGE_FORMAT_SAMPLE_FILENAME),
-                dailyCodingQuestion.getQuestion().getQuestionFrontendId(),
-                dailyCodingQuestion.getLink(),
-                dailyCodingQuestion.getQuestion().getTitle(),
-                prepareQuestion(dailyCodingQuestion.getQuestion().getContent()),
-                dailyCodingQuestion.getQuestion().getDifficulty(),
-                prepareTopics(dailyCodingQuestion.getQuestion().getTopicTags()),
-                dailyCodingQuestion.getQuestion().getAcRate());
+                leetCodeQuestion.getQuestionFrontendId(),
+                String.format(LEETCODE_QUESTION_URL_FORMAT, leetCodeQuestion.getTitleSlug()),
+                leetCodeQuestion.getTitle(),
+                prepareQuestion(leetCodeQuestion.getContent()),
+                leetCodeQuestion.getDifficulty(),
+                prepareTopics(leetCodeQuestion.getTopicTags()),
+                leetCodeQuestion.getAcRate());
     }
 
     private String prepareTopics(List<TopicTag> topicTags) {

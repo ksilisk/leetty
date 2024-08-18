@@ -7,4 +7,5 @@ directive @annotate(
 
 type Query {
     activeDailyCodingChallengeQuestion: DailyCodingQuestion
+    question(titleSlug: String): Question
 }

@@ -2,7 +2,7 @@ package com.ksilisk.leetty.telegram.bot.action.impl;
 
 import com.ksilisk.leetty.telegram.bot.action.LeettyAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
-import com.ksilisk.leetty.telegram.bot.service.LeettyBotService;
+import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
 import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
 import lombok.Setter;
@@ -18,10 +18,10 @@ public class StartCommandAction implements LeettyAction {
 
     private final Sender sender;
     private final MessageSampleReader messageSampleReader;
-    private final LeettyBotService botService;
+    private final LeettyFacade botService;
 
     public StartCommandAction(MessageSampleReader messageSampleReader, Sender sender,
-                              LeettyBotService botService) {
+                              LeettyFacade botService) {
         this.sender = sender;
         this.messageSampleReader = messageSampleReader;
         this.botService = botService;

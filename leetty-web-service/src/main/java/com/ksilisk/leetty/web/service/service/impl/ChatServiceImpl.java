@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Slf4j
@@ -47,5 +49,12 @@ public class ChatServiceImpl implements ChatService {
     public ChatDto getChat(Long id) {
         Chat chat = chatRepository.findById(id).orElseThrow(ChatNotFoundException::new);
         return OM.convertValue(chat, ChatDto.class);
+    }
+
+    @Override
+    public List<Long> getChatsToSendDaily(String time) {
+        return chatRepository.findChatsByDailySendTime(time).stream()
+                .map(Chat::getChatId)
+                .toList();
     }
 }
