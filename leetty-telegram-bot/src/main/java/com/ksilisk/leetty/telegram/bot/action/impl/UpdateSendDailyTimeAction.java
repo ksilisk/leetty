@@ -4,6 +4,7 @@ import com.ksilisk.leetty.telegram.bot.action.LeettyCallbackAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,6 +21,7 @@ import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.SET_SEND_DAIL
 import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.UPDATE_SEND_DAILY_TIME;
 
 @Component
+@RequiredArgsConstructor
 public class UpdateSendDailyTimeAction implements LeettyCallbackAction {
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private static final String DISABLE_SENDING_DAILY_DATA = "";
@@ -31,10 +33,6 @@ public class UpdateSendDailyTimeAction implements LeettyCallbackAction {
             LocalTime.of(22, 0));
 
     private final Sender sender;
-
-    public UpdateSendDailyTimeAction(Sender sender) {
-        this.sender = sender;
-    }
 
     @Override
     public void execute(Update update, CallbackData callbackData) {

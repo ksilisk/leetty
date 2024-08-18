@@ -1,12 +1,14 @@
 package com.ksilisk.leetty.telegram.bot.service.impl;
 
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
+import com.ksilisk.leetty.common.codegen.types.Question;
 import com.ksilisk.leetty.common.dto.ChatDto;
 import com.ksilisk.leetty.common.dto.UserDto;
 import com.ksilisk.leetty.telegram.bot.feign.ChatClient;
-import com.ksilisk.leetty.telegram.bot.feign.DailyQuestionClient;
+import com.ksilisk.leetty.telegram.bot.feign.QuestionClient;
 import com.ksilisk.leetty.telegram.bot.feign.UserClient;
-import com.ksilisk.leetty.telegram.bot.service.LeettyBotService;
+import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
+import com.ksilisk.leetty.telegram.bot.util.LeetCodeUrlParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -19,14 +21,15 @@ import static com.ksilisk.leetty.telegram.bot.action.impl.UpdateSendDailyTimeAct
 
 @Service
 @RequiredArgsConstructor
-public class LeettyBotServiceImpl implements LeettyBotService {
-    private final DailyQuestionClient dailyQuestionClient;
+public class LeettyFacadeImpl implements LeettyFacade {
+    private final LeetCodeUrlParser leetCodeUrlParser;
+    private final QuestionClient questionClient;
     private final ChatClient chatClient;
     private final UserClient userClient;
 
     @Override
     public List<Long> getUsersToSendDailyQuestion(LocalTime time) {
-        return dailyQuestionClient.getUsersToSendDaily(TIME_FORMATTER.format(time));
+        return chatClient.getUsersToSendDaily(TIME_FORMATTER.format(time));
     }
 
     @Override
@@ -39,7 +42,7 @@ public class LeettyBotServiceImpl implements LeettyBotService {
 
     @Override
     public DailyCodingQuestion getDailyQuestion() {
-        return dailyQuestionClient.getDailyQuestion();
+        return questionClient.getDailyQuestion();
     }
 
     @Override
@@ -61,5 +64,11 @@ public class LeettyBotServiceImpl implements LeettyBotService {
                 .title(chat.getTitle())
                 .build();
         chatClient.addChat(chatDto);
+    }
+
+    @Override
+    public Question parseQuestionFromUrl(String url) {
+        String titleSlug = leetCodeUrlParser.getTitleSlug(url);
+        return questionClient.getLeetCodeQuestion(titleSlug);
     }
 }

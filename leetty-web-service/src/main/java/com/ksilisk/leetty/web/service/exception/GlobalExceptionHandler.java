@@ -2,6 +2,7 @@ package com.ksilisk.leetty.web.service.exception;
 
 import com.ksilisk.leetty.web.service.exception.type.EntityAlreadyExistsException;
 import com.ksilisk.leetty.web.service.exception.type.EntityNotFoundException;
+import com.ksilisk.leetty.web.service.exception.type.QuestionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -19,6 +20,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFound(Exception ex, WebRequest webRequest) {
         log.warn("Handled entity not found exception. Request Details: {}", webRequest.getDescription(true), ex);
+        ProblemDetail body = createProblemDetail(ex, HttpStatus.NOT_FOUND, ex.getMessage(), null, null, webRequest);
+        return createResponseEntity(body, null, HttpStatus.NOT_FOUND, webRequest);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public ResponseEntity<Object> handleQuestionNotFound(Exception ex, WebRequest webRequest) {
+        log.warn("Handled question not found exception. Request Details: {}", webRequest.getDescription(true), ex);
         ProblemDetail body = createProblemDetail(ex, HttpStatus.NOT_FOUND, ex.getMessage(), null, null, webRequest);
         return createResponseEntity(body, null, HttpStatus.NOT_FOUND, webRequest);
     }

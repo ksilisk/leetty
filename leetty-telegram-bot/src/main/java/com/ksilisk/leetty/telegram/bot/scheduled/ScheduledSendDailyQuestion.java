@@ -2,8 +2,8 @@ package com.ksilisk.leetty.telegram.bot.scheduled;
 
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.telegram.bot.config.LeettyProperties;
-import com.ksilisk.leetty.telegram.bot.util.DailyQuestionMessagePreparer;
-import com.ksilisk.leetty.telegram.bot.service.LeettyBotService;
+import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
+import com.ksilisk.leetty.telegram.bot.util.LeetCodeQuestionMessagePreparer;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -24,15 +24,15 @@ import static com.ksilisk.leetty.telegram.bot.action.impl.UpdateSendDailyTimeAct
 public class ScheduledSendDailyQuestion implements Closeable {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final ZoneId zoneId;
-    private final LeettyBotService leettyBotService;
+    private final LeettyFacade leettyFacade;
     private final Sender sender;
-    private final DailyQuestionMessagePreparer dailyQuestionMessagePreparer;
+    private final LeetCodeQuestionMessagePreparer leetCodeQuestionMessagePreparer;
 
-    public ScheduledSendDailyQuestion(LeettyBotService leettyBotService, LeettyProperties leettyProperties,
-                                      Sender sender, DailyQuestionMessagePreparer dailyQuestionMessagePreparer) {
-        this.leettyBotService = leettyBotService;
+    public ScheduledSendDailyQuestion(LeettyFacade leettyFacade, LeettyProperties leettyProperties,
+                                      Sender sender, LeetCodeQuestionMessagePreparer leetCodeQuestionMessagePreparer) {
+        this.leettyFacade = leettyFacade;
         this.sender = sender;
-        this.dailyQuestionMessagePreparer = dailyQuestionMessagePreparer;
+        this.leetCodeQuestionMessagePreparer = leetCodeQuestionMessagePreparer;
         this.zoneId = leettyProperties.getZoneId();
     }
 
@@ -54,9 +54,9 @@ public class ScheduledSendDailyQuestion implements Closeable {
     private void sendAll(LocalTime time) {
         log.info("Start sending daily questions!");
         try {
-            DailyCodingQuestion dailyCodingQuestion = leettyBotService.getDailyQuestion();
-            leettyBotService.getUsersToSendDailyQuestion(time).stream()
-                    .map(id -> dailyQuestionMessagePreparer.prepareMessage(dailyCodingQuestion, id))
+            DailyCodingQuestion dailyCodingQuestion = leettyFacade.getDailyQuestion();
+            leettyFacade.getUsersToSendDailyQuestion(time).stream()
+                    .map(id -> leetCodeQuestionMessagePreparer.prepareMessage(dailyCodingQuestion.getQuestion(), id))
                     .forEach(sender::execute);
         } catch (Exception e) {
             log.warn("Error while scheduled send leetcode daily question.", e);

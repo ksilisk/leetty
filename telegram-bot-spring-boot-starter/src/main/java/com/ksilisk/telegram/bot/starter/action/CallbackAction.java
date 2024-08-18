@@ -11,6 +11,7 @@ public interface CallbackAction<S, E, T> extends Action<S, E> {
 
     @Override
     default void execute(Update update) {
+        throw new IllegalStateException("Method unavailable. Callback Action need callback data.");
     }
 
     @Override

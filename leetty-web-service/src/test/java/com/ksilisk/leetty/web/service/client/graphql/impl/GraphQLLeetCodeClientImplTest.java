@@ -21,7 +21,7 @@ class GraphQLLeetCodeClientImplTest {
     void executeTest_shouldNotThrowException() throws JsonProcessingException {
         // given
         DailyCodingQuestion question = DailyCodingQuestion.newBuilder().userStatus("super").date("date").link("superLink").build();
-        String testJson = "{\"data\":" + om.writeValueAsString(question) + "}";
+        String testJson = "{\"data\": {\"activeDailyCodingChallengeQuestion\":" + om.writeValueAsString(question) + "}}";
         RestClientGraphQLClient restClient = Mockito.mock(RestClientGraphQLClient.class);
         GraphQLLeetCodeClient leetCodeClient = new GraphQLLeetCodeClientImpl(restClient);
         GraphQLResponse response = new GraphQLResponse(testJson);

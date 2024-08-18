@@ -1,6 +1,4 @@
 type DailyCodingQuestion
-@annotate(name: "HasJsonRootWrapper", type: "annotation")
-@annotate(name: "JsonTypeName", type: "jackson", inputs: {value: "activeDailyCodingChallengeQuestion"})
 {
     date: String
     userStatus: String
@@ -8,7 +6,8 @@ type DailyCodingQuestion
     question: Question
 }
 
-type Question {
+type Question
+{
     questionId: Int
     questionFrontendId: Int
     acRate: Float

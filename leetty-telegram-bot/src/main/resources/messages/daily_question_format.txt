@@ -1,4 +1,4 @@
-%d. <b><a href="https://leetcode.com%s">%s</a></b>
+%d. <b><a href="%s">%s</a></b>
 
 %s
 Difficulty: <tg-spoiler><b>%s</b></tg-spoiler>

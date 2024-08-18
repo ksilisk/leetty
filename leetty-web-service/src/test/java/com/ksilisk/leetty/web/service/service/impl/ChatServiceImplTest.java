@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @DataJpaTest
 class ChatServiceImplTest {
     final ChatService chatService;
@@ -92,5 +96,34 @@ class ChatServiceImplTest {
         ChatDto chatDto = ChatDto.builder().build();
         // then
         Assertions.assertThrows(RuntimeException.class, () -> chatService.putChat(chatDto));
+    }
+
+    @Test
+    void getChatsToSendDaily_whenChatsNotEmpty_shouldReturnEmptyList() {
+        // given
+        List<Chat> expectedChats = List.of(
+                Chat.builder().chatId(1L).dailySendTime("10:00").build(),
+                Chat.builder().chatId(2L).dailySendTime("10:00").build(),
+                Chat.builder().chatId(4L).dailySendTime("10:00").build());
+        List<Chat> allChats = new ArrayList<>(expectedChats);
+        allChats.addAll(List.of(
+                Chat.builder().chatId(3L).dailySendTime("15:00").build(),
+                Chat.builder().chatId(5L).dailySendTime("16:00").build()));
+        List<Long> expectedIds = expectedChats.stream().map(Chat::getChatId).toList();
+        // when
+        chatRepository.saveAll(allChats);
+        List<Long> actualIds = chatService.getChatsToSendDaily("10:00");
+        // then
+        Assertions.assertIterableEquals(expectedIds, actualIds);
+    }
+
+    @Test
+    void getChatsToSendDaily_whenChatsEmpty_shouldReturnEmptyList() {
+        // given
+        List<Long> expectedChatList = Collections.emptyList();
+        // when
+        List<Long> actualChatList = chatService.getChatsToSendDaily("18:00");
+        // then
+        Assertions.assertEquals(expectedChatList, actualChatList);
     }
 }
