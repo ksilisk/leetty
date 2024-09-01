@@ -13,14 +13,14 @@ import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.HELP_COMMAND;
 
 @Component
 @RequiredArgsConstructor
-public class HelpCommandAction implements LeettyAction {
+public class HelpCommandAction extends LeettyAction {
     private static final String HELP_MESSAGE_SAMPLE_FILENAME = "help_message.txt";
 
     private final Sender sender;
     private final MessageSampleReader messageSampleReader;
 
     @Override
-    public void execute(Update update) {
+    public void handle(Update update) {
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text(messageSampleReader.read(HELP_MESSAGE_SAMPLE_FILENAME))

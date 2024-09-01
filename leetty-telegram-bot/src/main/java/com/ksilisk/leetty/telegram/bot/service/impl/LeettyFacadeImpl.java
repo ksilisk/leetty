@@ -1,14 +1,10 @@
 package com.ksilisk.leetty.telegram.bot.service.impl;
 
-import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
-import com.ksilisk.leetty.common.codegen.types.Question;
 import com.ksilisk.leetty.common.dto.ChatDto;
 import com.ksilisk.leetty.common.dto.UserDto;
 import com.ksilisk.leetty.telegram.bot.feign.ChatClient;
-import com.ksilisk.leetty.telegram.bot.feign.QuestionClient;
 import com.ksilisk.leetty.telegram.bot.feign.UserClient;
 import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
-import com.ksilisk.leetty.telegram.bot.util.LeetCodeUrlParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -21,9 +17,7 @@ import static com.ksilisk.leetty.telegram.bot.action.impl.UpdateSendDailyTimeAct
 
 @Service
 @RequiredArgsConstructor
-public class LeettyFacadeImpl implements LeettyFacade {
-    private final LeetCodeUrlParser leetCodeUrlParser;
-    private final QuestionClient questionClient;
+class LeettyFacadeImpl implements LeettyFacade {
     private final ChatClient chatClient;
     private final UserClient userClient;
 
@@ -38,11 +32,6 @@ public class LeettyFacadeImpl implements LeettyFacade {
                 .chatId(chatId)
                 .dailySendTime(time)
                 .build());
-    }
-
-    @Override
-    public DailyCodingQuestion getDailyQuestion() {
-        return questionClient.getDailyQuestion();
     }
 
     @Override
@@ -64,11 +53,5 @@ public class LeettyFacadeImpl implements LeettyFacade {
                 .title(chat.getTitle())
                 .build();
         chatClient.addChat(chatDto);
-    }
-
-    @Override
-    public Question parseQuestionFromUrl(String url) {
-        String titleSlug = leetCodeUrlParser.getTitleSlug(url);
-        return questionClient.getLeetCodeQuestion(titleSlug);
     }
 }

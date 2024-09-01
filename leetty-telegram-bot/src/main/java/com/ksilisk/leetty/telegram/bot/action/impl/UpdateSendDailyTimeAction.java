@@ -22,7 +22,7 @@ import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.UPDATE_SEND_D
 
 @Component
 @RequiredArgsConstructor
-public class UpdateSendDailyTimeAction implements LeettyCallbackAction {
+public class UpdateSendDailyTimeAction extends LeettyCallbackAction {
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private static final String DISABLE_SENDING_DAILY_DATA = "";
 
@@ -35,12 +35,11 @@ public class UpdateSendDailyTimeAction implements LeettyCallbackAction {
     private final Sender sender;
 
     @Override
-    public void execute(Update update, CallbackData callbackData) {
-        update.getCallbackQuery().getMessage();
+    public void handle(Update update, CallbackData callbackData) {
         EditMessageText editMessageText = EditMessageText.builder()
                 .chatId(update.getCallbackQuery().getMessage().getChatId())
                 .messageId(update.getCallbackQuery().getMessage().getMessageId())
-                .text("Выберите в какое время присылать задачу:")
+                .text("Choose time to sending daily question:")
                 .replyMarkup((InlineKeyboardMarkup) replyKeyboard())
                 .build();
         sender.execute(editMessageText);
@@ -53,7 +52,7 @@ public class UpdateSendDailyTimeAction implements LeettyCallbackAction {
 
     private ReplyKeyboard replyKeyboard() {
         InlineKeyboardButton disableSendingButton = InlineKeyboardButton.builder()
-                .text("Отключить отправку!")
+                .text("Disable sending!")
                 .callbackData(new CallbackData(SET_SEND_DAILY_TIME,
                         Map.of(SetSendDailyTimeAction.TIME_CALLBACK_DATA_KEY, DISABLE_SENDING_DAILY_DATA)).toString())
                 .build();

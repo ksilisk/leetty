@@ -19,14 +19,14 @@ import static com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent.UPDATE_SEND_D
 
 @Component
 @RequiredArgsConstructor
-public class SettingsCommandAction implements LeettyAction {
+public class SettingsCommandAction extends LeettyAction {
     private static final String SETTINGS_MESSAGE_SAMPLE_FILENAME = "settings_message.txt";
 
     private final Sender sender;
     private final MessageSampleReader messageSampleReader;
 
     @Override
-    public void execute(Update update) {
+    public void handle(Update update) {
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text(messageSampleReader.read(SETTINGS_MESSAGE_SAMPLE_FILENAME))
@@ -42,7 +42,7 @@ public class SettingsCommandAction implements LeettyAction {
 
     private ReplyKeyboard getKeyboard() {
         InlineKeyboardButton button = InlineKeyboardButton.builder()
-                .text("Отправка ежедневного задания по расписанию")
+                .text("Auto sending daily question")
                 .callbackData(new CallbackData(UPDATE_SEND_DAILY_TIME).toString())
                 .build();
         return InlineKeyboardMarkup.builder()

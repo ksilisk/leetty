@@ -13,14 +13,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class SetSendDailyTimeAction implements LeettyCallbackAction {
+public class SetSendDailyTimeAction extends LeettyCallbackAction {
     public static final String TIME_CALLBACK_DATA_KEY = "time";
 
     private final Sender sender;
     private final LeettyFacade leettyFacade;
 
     @Override
-    public void execute(Update update, CallbackData callbackData) {
+    public void handle(Update update, CallbackData callbackData) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         leettyFacade.updateTimeToSendDailyQuestion(callbackQuery.getMessage().getChatId(),
                 callbackData.getKey(TIME_CALLBACK_DATA_KEY).toString());

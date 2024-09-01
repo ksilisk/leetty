@@ -11,14 +11,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
-public class InvalidCommandAction implements LeettyAction {
+public class InvalidCommandAction extends LeettyAction {
     private static final String INVALID_COMMAND_MESSAGE_SAMPLE_FILENAME = "invalid_command_message.txt";
 
     private final Sender sender;
     private final MessageSampleReader messageSampleReader;
 
     @Override
-    public void execute(Update update) {
+    public void handle(Update update) {
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text(messageSampleReader.read(INVALID_COMMAND_MESSAGE_SAMPLE_FILENAME))

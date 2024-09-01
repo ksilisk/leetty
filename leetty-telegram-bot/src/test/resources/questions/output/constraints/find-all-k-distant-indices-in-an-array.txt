@@ -1,0 +1,4 @@
+1 <= nums.length <= 1000
+1 <= nums[i] <= 1000
+key is an integer from the array nums.
+1 <= k <= nums.length

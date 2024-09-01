@@ -4,5 +4,5 @@ import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.state.LeettyBotStates;
 import com.ksilisk.telegram.bot.starter.action.Action;
 
-public interface LeettyAction extends Action<LeettyBotStates, LeettyBotEvent> {
+public abstract class LeettyAction extends Action<LeettyBotStates, LeettyBotEvent> {
 }
