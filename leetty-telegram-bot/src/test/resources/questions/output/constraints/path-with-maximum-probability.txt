@@ -1,0 +1,8 @@
+2 <= n <= 10^4
+0 <= start, end < n
+start != end
+0 <= a, b < n
+a != b
+0 <= succProb.length == edges.length <= 2*10^4
+0 <= succProb[i] <= 1
+There is at most one edge between every two nodes.

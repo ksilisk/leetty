@@ -1,0 +1,7 @@
+%s. %s
+
+%s
+
+Difficulty: %s
+Topics: %s
+Acceptance: %.1f%%

@@ -11,7 +11,7 @@ class CallbackActionTest {
         // given
         CallbackAction<?, ?, ?> callbackAction = new CallbackAction<>() {
             @Override
-            public void execute(Update update, Object callbackData) {
+            public void handle(Update update, Object callbackData) {
             }
 
             @Override
@@ -20,7 +20,7 @@ class CallbackActionTest {
             }
         };
         // then
-        assertThrowsExactly(IllegalStateException.class, () -> callbackAction.execute(new Update()));
+        assertThrowsExactly(IllegalStateException.class, () -> callbackAction.handle(new Update()));
     }
 
 }

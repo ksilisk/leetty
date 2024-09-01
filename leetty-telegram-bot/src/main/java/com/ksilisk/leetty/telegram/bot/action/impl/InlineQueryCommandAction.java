@@ -5,8 +5,8 @@ import com.ksilisk.leetty.telegram.bot.action.LeettyAction;
 import com.ksilisk.leetty.telegram.bot.config.LeettyProperties.InlineModeProperties;
 import com.ksilisk.leetty.telegram.bot.config.LeettyProperties.InlineModeProperties.ResultMessageProperties;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
-import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
-import com.ksilisk.leetty.telegram.bot.util.LeetCodeQuestionMessagePreparer;
+import com.ksilisk.leetty.telegram.bot.service.LeetCodeQuestionMessagePreparer;
+import com.ksilisk.leetty.telegram.bot.service.QuestionService;
 import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class InlineQueryCommandAction implements LeettyAction {
+public class InlineQueryCommandAction extends LeettyAction {
     private static final String INLINE_QUERY_HELP_MESSAGE_FILENAME = "inline_query_help_message.txt";
 
     private final Sender sender;
     private final MessageSampleReader messageSampleReader;
-    private final LeettyFacade leettyFacade;
+    private final QuestionService questionService;
     private final LeetCodeQuestionMessagePreparer messagePreparer;
     private final InlineModeProperties inlineModeProperties;
 
@@ -41,15 +41,14 @@ public class InlineQueryCommandAction implements LeettyAction {
     }
 
     @Override
-    public void execute(Update update) {
+    public void handle(Update update) {
         InlineQuery inlineQuery = update.getInlineQuery();
         String leetCodeUrl = inlineQuery.getQuery();
         AnswerInlineQueryBuilder answerInlineQuery = AnswerInlineQuery.builder()
                 .inlineQueryId(inlineQuery.getId());
         try {
-            Question leetCodeQuestion = leettyFacade.parseQuestionFromUrl(leetCodeUrl);
-            InputTextMessageContent preparedContent = messagePreparer.prepareMessageContent(leetCodeQuestion);
-            answerInlineQuery.result(createQuestionMessage(preparedContent, leetCodeQuestion));
+            Question leetCodeQuestion = questionService.parseQuestionFromUrl(leetCodeUrl);
+            answerInlineQuery.result(createQuestionMessage(leetCodeQuestion));
         } catch (Exception ex) {
             log.warn("Error while process inline query. Sending help result. Update: {}", update, ex);
             answerInlineQuery.result(createHelpMessage());
@@ -57,12 +56,12 @@ public class InlineQueryCommandAction implements LeettyAction {
         sender.execute(answerInlineQuery.build());
     }
 
-    private InlineQueryResultArticle createQuestionMessage(InputTextMessageContent preparedContent, Question question) {
+    private InlineQueryResultArticle createQuestionMessage(Question question) {
         ResultMessageProperties resultMessageProperties = inlineModeProperties.getResultMessage();
         InlineQueryResultArticleBuilder queryResultBuilder = InlineQueryResultArticle.builder()
                 .id(UUID.randomUUID().toString())
-                .title(question.getTitle())
-                .inputMessageContent(preparedContent);
+                .title(question.getTitle());
+        messagePreparer.prepareInlineQueryResult(queryResultBuilder, question);
         setThumbnail(queryResultBuilder, resultMessageProperties.getThumbnail());
         return queryResultBuilder.build();
     }

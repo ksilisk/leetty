@@ -1,0 +1,210 @@
+type DailyCodingQuestion
+{
+    date: String
+    userStatus: String
+    link: String
+    question: Question
+}
+
+type Question
+{
+    title: String
+    titleSlug: String
+    questionId: String
+    questionFrontendId: String
+    questionTitle: String
+    questionTitleSlug: String
+    questionType: String
+    translatedTitle: String
+    content: String
+    translatedContent: String
+    sessionId: String
+    categoryTitle: String
+    hide: Boolean
+    difficulty: String
+    stats: String
+    companyTagStats: String
+    companyTagStatsV2: String
+    topicTags: [TopicTag]
+    similarQuestions: String
+    similarQuestionList: [Question]
+    mysqlSchemas: [String]
+    dataSchemas: [String]
+    judgeType: String
+    codeDefinition: String
+    frontendPreviews: String
+    likes: Int
+    dislikes: Int
+    article: String
+    articleTopicId: String
+    isPaidOnly: Boolean
+    status: String
+    allowDiscuss: Boolean
+    boundTopicId: String
+    canSeeQuestion: Boolean
+    enableTestMode: Boolean
+    metaData: String
+    enableRunCode: Boolean
+    enableSubmit: Boolean
+    judgerAvailable: Boolean
+    infoVerified: Boolean
+    envInfo: String
+    randomQuestionUrl: String
+    submitUrl: String
+    interpretUrl: String
+    questionDetailUrl: String
+    urlManager: String
+    isLiked: Boolean
+    nextChallengePairs: String
+    nextChallenges: [Question]
+    libraryUrl: String
+    adminUrl: String
+    note: String
+    hints: [String]
+    solution: Solution
+    codeSnippets: [CodeSnippet]
+    langToValidPlayground: String
+    exampleTestcases: String
+    exampleTestcaseList: [String]
+    sampleTestCase: String
+    hideLastTestcases: HideLastTestcases
+    isFavor: Boolean
+    acRate: Float
+    freqBar: String
+    frequency: Int
+    hasSolution: Boolean
+    hasVideoSolution: Boolean
+    challengeQuestion: ChallengeQuestion
+    challengeQuestionsV2: [ChallengeQuestion]
+    solutionNum: Int
+    discussionCount: Int
+    hasFrontendPreview: Boolean
+    attachments: [Attachment]
+    #    contributors: [ContributorNode] -> now skip because not need
+    #    companyTags: [CompanyTagNode] -> now skip because not need
+}
+
+type TopicTag {
+    id: String
+    name: String
+    slug: String
+    tagType: String
+    createdAt: String
+    isEnabled: Boolean
+    keywords: String
+    imgUrl: String
+    hotScore: String
+    isTagEnabled: Boolean
+    isStandard: Boolean
+    isUserSelectable: Boolean
+    questions: [Question]
+    questionIds: [Int]
+    frequencies: String
+    translatedName: String
+    tagId: Int
+    #    tagCategories: [TagCategoryNode] -> now skip because not need
+    #    questionapplicationSet: [ApplicationNode] -> now skip because not need
+    #    favoriteSet: [FeaturedQuestionListNode] -> now skip because not need
+    #    favorites: [FeaturedQuestionListNode] -> now skip because not need
+    #    discussTopicTag: [DiscussTopicTagNode] -> now skip because not need
+    #    companySet: [InterviewCompanyNode] -> now skip because not need
+    #    interviewTagsCategories: [InterviewTagsCategoryNode] -> now skip because not need
+}
+
+## AKA AttachmentNode
+type Attachment {
+    name: String
+    content: String
+    extension: String
+}
+
+# AKA ChallengeQuestionNode
+type ChallengeQuestion {
+    id: String
+    incompleteChallengeCount: Int
+    streakCount: Int
+    date: String
+    type: ChallengeQuestionTypeEnum
+    status: ChallengeQuestionStatusEnum
+}
+
+enum ChallengeQuestionStatusEnum {
+    NOT_STARTED
+    FINISHED
+}
+
+enum ChallengeQuestionTypeEnum {
+    DAILY
+    WEEKLY
+}
+
+type HideLastTestcases {
+    id: String
+    question: Question
+    count: Int
+}
+
+type CodeSnippet {
+    langSlug: String
+    code: String
+}
+
+# AKA ArticleNode
+type Solution {
+    id: String
+    slug: String
+    hasVideoSolution: Boolean
+    paidOnlyVideo: Boolean
+    url: String
+    content: String
+    contentTypeId: String
+    canSeeDetail: Boolean
+    rating: Rating
+    paidOnly: Boolean
+    titleSlug: String
+    topicId: Int
+    topic: Topic
+    body: String
+}
+
+# AKA TopicNode
+type Topic {
+    id: String
+    title: String
+    viewCount: Int
+    commentCount: Int
+    topLevelCommentCount: Int
+    tags: [String]
+    nodebbTid: Int
+    pinned: Boolean
+    pinnedAt: String
+    challengequestionSet: [ChallengeQuestion]
+    subscribed: Boolean
+    lastActivity: Int
+    hideFromTrending: Boolean
+    index: Int
+    isFavorite: Boolean
+    favoriteCount: Int
+    #    post: PostNode -> now skip because not need
+    #    lastComment: CommentNode -> now skip because not need
+    #    contestSet: [ContestNode] -> now skip because not need
+    #    authors: UserNode -> now skip because not need
+    #    category: DiscussCategoryNode -> now skip because not need
+    #    searchMeta: SearchMetaNode -> now skip because not need
+    #    solutionTags: [SolutionTagNode] -> now skip because not need
+}
+
+# AKA RatingNode
+type Rating {
+    id: String
+    count: Int
+    average: Float
+    userRating: UserRating
+}
+
+# AKA UserRatingNode
+type UserRating {
+    id: String
+    score: Int
+}
+
