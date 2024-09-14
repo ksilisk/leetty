@@ -2,6 +2,7 @@ package com.ksilisk.leetty.web.service.service.impl;
 
 import com.ksilisk.leetty.common.codegen.client.ActiveDailyCodingChallengeQuestionGraphQLQuery;
 import com.ksilisk.leetty.common.codegen.client.QuestionGraphQLQuery;
+import com.ksilisk.leetty.common.codegen.client.RandomQuestionGraphQLQuery;
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.Question;
 import com.ksilisk.leetty.common.codegen.types.TopicTag;
@@ -22,6 +23,45 @@ import static org.junit.jupiter.api.Assertions.*;
 class QuestionServiceImplTest {
     final GraphQLLeetCodeClient leetCodeClient = Mockito.mock(GraphQLLeetCodeClientImpl.class);
     final QuestionService questionService = new QuestionServiceImpl(leetCodeClient);
+
+    @Test
+    void getRandomQuestionWithFirstResultContentIsNull_shouldRetryAndReturnQuestionWithContent() {
+        // given
+        Question withoutContent = Question.newBuilder()
+                .title("Test Without Content")
+                .titleSlug("test-without-content")
+                .build();
+        Question expectedQuestionWithContent = Question.newBuilder()
+                .title("Test With Content")
+                .titleSlug("test-with-content")
+                .content("Test Content For Question")
+                .build();
+        Mockito.when(leetCodeClient.execute(
+                        ArgumentMatchers.isA(RandomQuestionGraphQLQuery.class),
+                        ArgumentMatchers.isA(BaseSubProjectionNode.class),
+                        ArgumentMatchers.eq(Question.class)))
+                .thenReturn(withoutContent, expectedQuestionWithContent);
+        // when
+        Question actualQuestion = questionService.getRandomQuestion("testSlug");
+        // then
+        assertEquals(expectedQuestionWithContent, actualQuestion);
+    }
+
+    @Test
+    void getRandomQuestionTest_shouldGetRandomAndNotThrowException() {
+        // given
+        Question expectedRandomQuestion =
+                Question.newBuilder().title("test").content("testContent").titleSlug("testSlug").build();
+        Mockito.when(leetCodeClient.execute(
+                        ArgumentMatchers.isA(RandomQuestionGraphQLQuery.class),
+                        ArgumentMatchers.isA(BaseSubProjectionNode.class),
+                        ArgumentMatchers.eq(Question.class)))
+                .thenReturn(expectedRandomQuestion);
+        // when
+        Question actualRandomQuestion = questionService.getRandomQuestion("testSlug");
+        // then
+        assertEquals(expectedRandomQuestion, actualRandomQuestion);
+    }
 
     @Test
     void getDailyQuestionTest_shouldNotThrowException() {

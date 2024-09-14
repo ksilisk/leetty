@@ -7,6 +7,8 @@ import com.ksilisk.leetty.common.dto.question.*;
 public interface QuestionService {
     Question getQuestion(String titleSlug);
 
+    Question getRandomQuestion(String categorySlug);
+
     DailyCodingQuestion getDailyQuestions();
 
     QuestionAcceptance getAcceptance(String titleSlug);

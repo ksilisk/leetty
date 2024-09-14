@@ -36,11 +36,6 @@ public class InlineQueryCommandAction extends LeettyAction {
     private final InlineModeProperties inlineModeProperties;
 
     @Override
-    public LeettyBotEvent getEvent() {
-        return LeettyBotEvent.INLINE_QUERY_COMMAND;
-    }
-
-    @Override
     public void handle(Update update) {
         InlineQuery inlineQuery = update.getInlineQuery();
         String leetCodeUrl = inlineQuery.getQuery();
@@ -48,15 +43,16 @@ public class InlineQueryCommandAction extends LeettyAction {
                 .inlineQueryId(inlineQuery.getId());
         try {
             Question leetCodeQuestion = questionService.parseQuestionFromUrl(leetCodeUrl);
-            answerInlineQuery.result(createQuestionMessage(leetCodeQuestion));
+            answerInlineQuery.result(createQuestionMessageQuery(leetCodeQuestion));
         } catch (Exception ex) {
             log.warn("Error while process inline query. Sending help result. Update: {}", update, ex);
-            answerInlineQuery.result(createHelpMessage());
+            answerInlineQuery.result(createHelpMessageQuery());
+            answerInlineQuery.result(createRandomQuestionMessageQuery());
         }
         sender.execute(answerInlineQuery.build());
     }
 
-    private InlineQueryResultArticle createQuestionMessage(Question question) {
+    private InlineQueryResultArticle createQuestionMessageQuery(Question question) {
         ResultMessageProperties resultMessageProperties = inlineModeProperties.getResultMessage();
         InlineQueryResultArticleBuilder queryResultBuilder = InlineQueryResultArticle.builder()
                 .id(UUID.randomUUID().toString())
@@ -66,7 +62,21 @@ public class InlineQueryCommandAction extends LeettyAction {
         return queryResultBuilder.build();
     }
 
-    private InlineQueryResultArticle createHelpMessage() {
+    private InlineQueryResultArticle createRandomQuestionMessageQuery() {
+        InlineModeProperties.RandomQuestionMessageProperties randomQuestionMessageProperties = inlineModeProperties.getRandomMessage();
+        Question randomQuestion = questionService.getRandomQuestion();
+        InlineQueryResultArticle.InlineQueryResultArticleBuilder randomQuestionQueryBuilder = InlineQueryResultArticle.builder()
+                .id(UUID.randomUUID().toString())
+                .title(randomQuestionMessageProperties.getTitle());
+        messagePreparer.prepareInlineQueryResult(randomQuestionQueryBuilder, randomQuestion);
+        if (StringUtils.hasText(randomQuestionMessageProperties.getDescription())) {
+            randomQuestionQueryBuilder.description(randomQuestionMessageProperties.getDescription());
+        }
+        setThumbnail(randomQuestionQueryBuilder, randomQuestionMessageProperties.getThumbnail());
+        return randomQuestionQueryBuilder.build();
+    }
+
+    private InlineQueryResultArticle createHelpMessageQuery() {
         InlineModeProperties.HelpMessageProperties helpMessageProperties = inlineModeProperties.getHelpMessage();
         String helpMessage = messageSampleReader.read(INLINE_QUERY_HELP_MESSAGE_FILENAME);
         InputTextMessageContent inputTextMessageContent = InputTextMessageContent.builder()
@@ -94,5 +104,10 @@ public class InlineQueryCommandAction extends LeettyAction {
         if (properties.getWidth() != null) {
             queryResultBuilder.thumbnailWidth(properties.getWidth());
         }
+    }
+
+    @Override
+    public LeettyBotEvent getEvent() {
+        return LeettyBotEvent.INLINE_QUERY_COMMAND;
     }
 }

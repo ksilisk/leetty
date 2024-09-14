@@ -117,6 +117,11 @@ class LeettyStateMachineConfiguration extends StateMachineConfiguration<LeettyBo
                 .withInternal()
                 .source(WAIT_NEW_COMMAND)
                 .event(GET_QUESTION_TOPICS)
-                .action(eventActionMap.get(GET_QUESTION_TOPICS));
+                .action(eventActionMap.get(GET_QUESTION_TOPICS))
+                .and()
+                .withInternal()
+                .source(WAIT_NEW_COMMAND)
+                .action(eventActionMap.get(RANDOM_QUESTION_COMMAND))
+                .event(RANDOM_QUESTION_COMMAND);
     }
 }

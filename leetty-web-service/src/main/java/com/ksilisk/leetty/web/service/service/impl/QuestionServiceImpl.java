@@ -1,11 +1,9 @@
 package com.ksilisk.leetty.web.service.service.impl;
 
-import com.ksilisk.leetty.common.codegen.client.ActiveDailyCodingChallengeQuestionGraphQLQuery;
-import com.ksilisk.leetty.common.codegen.client.ActiveDailyCodingChallengeQuestionProjectionRoot;
-import com.ksilisk.leetty.common.codegen.client.QuestionGraphQLQuery;
-import com.ksilisk.leetty.common.codegen.client.QuestionProjectionRoot;
+import com.ksilisk.leetty.common.codegen.client.*;
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.Question;
+import com.ksilisk.leetty.common.codegen.types.QuestionListFilterInput;
 import com.ksilisk.leetty.common.codegen.types.TopicTag;
 import com.ksilisk.leetty.common.dto.question.*;
 import com.ksilisk.leetty.web.service.client.graphql.GraphQLLeetCodeClient;
@@ -14,11 +12,13 @@ import com.ksilisk.leetty.web.service.service.QuestionService;
 import com.netflix.graphql.dgs.client.codegen.BaseSubProjectionNode;
 import com.netflix.graphql.dgs.client.codegen.GraphQLQuery;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 class QuestionServiceImpl implements QuestionService {
@@ -30,6 +30,25 @@ class QuestionServiceImpl implements QuestionService {
                 .difficulty().title().content().questionFrontendId().acRate().titleSlug().likes().dislikes().questionDetailUrl()
                 .topicTags().name();
         return fetchQuestionProjection(titleSlug, questionProjectionNode);
+    }
+
+    @Override
+    public Question getRandomQuestion(String categorySlug) {
+        Question randomQuestion;
+        do {
+            GraphQLQuery randomQuestionQuery = RandomQuestionGraphQLQuery.newRequest()
+                    .categorySlug(categorySlug)
+                    .filters(QuestionListFilterInput.newBuilder().build())
+                    .build();
+            BaseSubProjectionNode<?, ?> randomQuestionProjectionNode = new RandomQuestionProjectionRoot<>()
+                    .difficulty().title().content().questionFrontendId().acRate().titleSlug().likes().dislikes().questionDetailUrl()
+                    .topicTags().name();
+            randomQuestion = leetCodeClient.execute(randomQuestionQuery, randomQuestionProjectionNode, Question.class);
+            if (randomQuestion.getContent() == null) {
+                log.info("Handled question without content. QuestionTitleSlug: {}. Retry request.", randomQuestion.getTitleSlug());
+            }
+        } while (randomQuestion.getContent() == null);
+        return randomQuestion;
     }
 
     @Override

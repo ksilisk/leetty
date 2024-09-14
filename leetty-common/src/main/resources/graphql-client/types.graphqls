@@ -208,3 +208,6 @@ type UserRating {
     score: Int
 }
 
+# empty type without any info (only for randomQuestion query)
+type QuestionListFilterInput {}
+
