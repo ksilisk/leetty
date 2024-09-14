@@ -7,26 +7,29 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(url = "${leetty.web-service-url}", name = "questionClient")
+@FeignClient(url = "${leetty.web-service-url}/v1/question", name = "questionClient")
 public interface QuestionClient {
-    @GetMapping("/api/question/{titleSlug}")
+    @GetMapping("/{titleSlug}")
     Question getLeetCodeQuestion(@PathVariable("titleSlug") String titleSlug);
 
-    @GetMapping("/api/daily-question")
+    @GetMapping("/daily")
     DailyCodingQuestion getDailyQuestion();
 
-    @GetMapping("/api/question/{titleSlug}/hints")
+    @GetMapping("/random/{categorySlug}")
+    Question getRandomQuestion(@PathVariable("categorySlug") String categorySlug);
+
+    @GetMapping("/{titleSlug}/hints")
     QuestionHints getHints(@PathVariable("titleSlug") String titleSlug);
 
-    @GetMapping("/api/question/{titleSlug}/acceptance")
+    @GetMapping("/{titleSlug}/acceptance")
     QuestionAcceptance getAcceptance(@PathVariable("titleSlug") String titleSlug);
 
-    @GetMapping("/api/question/{titleSlug}/content")
+    @GetMapping("/{titleSlug}/content")
     QuestionContent getContent(@PathVariable("titleSlug") String titleSlug);
 
-    @GetMapping("/api/question/{titleSlug}/topics")
+    @GetMapping("/{titleSlug}/topics")
     QuestionTopics getTopics(@PathVariable("titleSlug") String titleSlug);
 
-    @GetMapping("/api/question/{titleSlug}/difficulty")
+    @GetMapping("/{titleSlug}/difficulty")
     QuestionDifficulty getDifficulty(@PathVariable("titleSlug") String titleSlug);
 }

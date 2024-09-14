@@ -32,6 +32,23 @@ public class LeettyProperties {
     public static class InlineModeProperties {
         private HelpMessageProperties helpMessage = new HelpMessageProperties();
         private ResultMessageProperties resultMessage = new ResultMessageProperties();
+        private RandomQuestionMessageProperties randomMessage = new RandomQuestionMessageProperties();
+
+        @Getter
+        @Setter
+        @Validated
+        public static class RandomQuestionMessageProperties {
+            private static final String DEFAULT_RANDOM_QUESTION_MESSAGE_TITLE = "Random Question";
+            private static final String DEFAULT_RANDOM_QUESTION_MESSAGE_DESCRIPTION = "Get Random Question from LeetCode";
+            private static final String DEFAULT_RANDOM_QUESTION_MESSAGE_THUMBNAIL_URL = "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png";
+            private static final ThumbnailProperties DEFAULT_RANDOM_QUESTION_MESSAGE_THUMBNAIL_PROPERTIES =
+                    ThumbnailProperties.builder().url(DEFAULT_RANDOM_QUESTION_MESSAGE_THUMBNAIL_URL).build();
+
+            @NotBlank
+            private String title = DEFAULT_RANDOM_QUESTION_MESSAGE_TITLE;
+            private String description = DEFAULT_RANDOM_QUESTION_MESSAGE_DESCRIPTION;
+            private ThumbnailProperties thumbnail = DEFAULT_RANDOM_QUESTION_MESSAGE_THUMBNAIL_PROPERTIES;
+        }
 
         @Getter
         @Setter

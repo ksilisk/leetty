@@ -5,8 +5,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "userClient", url = "${leetty.web-service-url}")
+@FeignClient(name = "userClient", url = "${leetty.web-service-url}/v1/users")
 public interface UserClient {
-    @PutMapping("/api/users")
+    @PutMapping
     void addUser(@RequestBody UserDto userDto);
 }

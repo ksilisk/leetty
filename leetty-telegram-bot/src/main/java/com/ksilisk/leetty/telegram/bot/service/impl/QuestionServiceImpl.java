@@ -12,12 +12,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 class QuestionServiceImpl implements QuestionService {
+    private static final String DEFAULT_RANDOM_QUESTION_CATEGORY_SLUG = "algorithms";
+
     private final LeetCodeUrlParser leetCodeUrlParser;
     private final QuestionClient questionClient;
 
     @Override
     public DailyCodingQuestion getDailyQuestion() {
         return questionClient.getDailyQuestion();
+    }
+
+    @Override
+    public Question getRandomQuestion() {
+        return questionClient.getRandomQuestion(DEFAULT_RANDOM_QUESTION_CATEGORY_SLUG);
     }
 
     @Override

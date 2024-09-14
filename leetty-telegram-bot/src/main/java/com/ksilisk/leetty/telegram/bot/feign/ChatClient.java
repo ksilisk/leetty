@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "chatClient", url = "${leetty.web-service-url}")
+@FeignClient(name = "chatClient", url = "${leetty.web-service-url}/v1/chats")
 public interface ChatClient {
-    @PatchMapping("/api/chats")
+    @PatchMapping
     void updateChat(@RequestBody ChatDto chatDto);
 
-    @PutMapping("/api/chats")
+    @PutMapping
     void addChat(@RequestBody ChatDto chatDto);
 
-    @GetMapping("/api/chats/daily-question")
+    @GetMapping("/daily-question")
     List<Long> getUsersToSendDaily(@RequestParam("time") String time);
 }

@@ -8,4 +8,5 @@ directive @annotate(
 type Query {
     activeDailyCodingChallengeQuestion: DailyCodingQuestion
     question(titleSlug: String): Question
+    randomQuestion(categorySlug: String, filters: QuestionListFilterInput): Question
 }
