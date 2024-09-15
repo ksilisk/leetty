@@ -5,16 +5,44 @@ on:
     types: [published]
 
 jobs:
-  prepare-env:
+  checkout-project:
     runs-on: self-hosted
+    name: Checkout Leetty Project
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
-      - name: Build images
-        run: bash mvnw clean install spring-boot:build-image
-  run_app:
-    needs: [prepare-env]
+  build-install-project:
+    needs: [checkout-project]
     runs-on: self-hosted
+    name: Build Install Leetty Project
+    steps:
+      - name: Maven Clean Install
+        run: bash mvnw clean install
+  cool-down-after-build-project:
+    needs: [build-install-project]
+    runs-on: self-hosted
+    name: Cool Down | Sleep
+    steps:
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+  build-project-docker-images:
+    needs: [cool-down-after-build-project]
+    runs-on: self-hosted
+    name: Build Leetty Docker Images
+    steps:
+      - name: Build Docker images
+        run: bash mvnw spring-boot:build-image -DskipTests=true
+  cool-down-after-build-images:
+    needs: [build-project-docker-images]
+    runs-on: self-hosted
+    name: Cool Down | Sleep
+    steps:
+      - name: Sleep for 120 seconds
+        run: sleep 120s
+  run-project:
+    needs: [cool-down-after-build-images]
+    runs-on: self-hosted
+    name: Run Leetty Application
     steps:
       - name: Create Leetty version file
         run: echo "LEETTY_VERSION=${GITHUB_REF:11}" > .leetty_version_env

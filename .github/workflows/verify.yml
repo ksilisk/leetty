@@ -3,13 +3,13 @@ name: Verify Leetty Project
 on:
   push:
     branches:
-      - "*"
+      - "master"
   pull_request:
     branches:
       - "*"
 
 jobs:
-  run_tests:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
