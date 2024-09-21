@@ -10,6 +10,7 @@ services:
       REDIS_URL: ${REDIS_CONTAINER_NAME}:${REDIS_CONTAINER_PORT}
     volumes:
       - ${LEETTY_TELEGRAM_BOT_CONFIGS_PATH}:/conf
+      - ${LEETTY_TELEGRAM_BOT_LOGS_PATH}:/telegram_bot_logs
     ports:
       - ${LEETTY_TELEGRAM_BOT_PORT}:${LEETTY_TELEGRAM_BOT_PORT}
     expose:
@@ -39,6 +40,7 @@ services:
       LEETTY_AUTH_SERVICE_HOST: ${LEETTY_AUTH_SERVICE_CONTAINER_NAME}
     volumes:
       - ${LEETTY_AUTH_SERVICE_CONFIGS_PATH}:/conf
+      - ${LEETTY_AUTH_SERVICE_LOGS_PATH}:/auth_service_logs
     ports:
       - ${LEETTY_AUTH_SERVICE_PORT}:${LEETTY_AUTH_SERVICE_PORT}
     expose:
@@ -65,6 +67,7 @@ services:
       POSTGRES_DB: ${LEETTY_POSTGRES_DB_SECRET}
     volumes:
       - ${LEETTY_WEB_SERVICE_CONFIGS_PATH}:/conf
+      - ${LEETTY_WEB_SERVICE_LOGS_PATH}:/web_service_logs
     depends_on:
       postgres:
         condition: service_healthy
