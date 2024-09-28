@@ -19,12 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>com.ksilisk.leetty</groupId>
-            <artifactId>leetty-common</artifactId>
+            <artifactId>telegram-bot-spring-boot-starter</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ksilisk.leetty</groupId>
-            <artifactId>telegram-bot-spring-boot-starter</artifactId>
+            <artifactId>leetty-common</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>

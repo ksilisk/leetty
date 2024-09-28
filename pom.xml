@@ -19,7 +19,7 @@
         <spring.cloud.version>2023.0.0</spring.cloud.version>
         <graphql.codegen.plugin.version>1.50</graphql.codegen.plugin.version>
         <mojo.build.helper.plugin.version>3.5.0</mojo.build.helper.plugin.version>
-        <graphql.dgs.version>8.2.0</graphql.dgs.version>
+        <graphql.dgs.version>9.1.0</graphql.dgs.version>
         <dgs.codegen.shared.core.version>6.1.2</dgs.codegen.shared.core.version>
         <maven.surefire.plugin.version>3.2.2</maven.surefire.plugin.version>
         <telegram.bots.api.version>6.9.7.1</telegram.bots.api.version>

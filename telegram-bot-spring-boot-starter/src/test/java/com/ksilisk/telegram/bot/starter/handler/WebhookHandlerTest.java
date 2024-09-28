@@ -3,6 +3,7 @@ package com.ksilisk.telegram.bot.starter.handler;
 import com.ksilisk.telegram.bot.starter.config.BotProperties;
 import com.ksilisk.telegram.bot.starter.processor.UpdateProcessor;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
+import com.ksilisk.telegram.bot.starter.webhook.DefaultTelegramBotKafkaTopicConvention;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,7 +18,8 @@ class WebhookHandlerTest {
         Sender sender = Mockito.mock(Sender.class);
         UpdateProcessor updateProcessor = Mockito.mock(UpdateProcessor.class);
         SetWebhook setWebhook = Mockito.mock(SetWebhook.class);
-        WebhookHandler webhookHandler = new WebhookHandler(new BotProperties(), updateProcessor, sender) {
+        WebhookHandler webhookHandler = new WebhookHandler(new BotProperties(), updateProcessor, sender,
+                new DefaultTelegramBotKafkaTopicConvention()) {
             @Override
             protected void processUpdate(Update update) {
             }
@@ -34,7 +36,8 @@ class WebhookHandlerTest {
         UpdateProcessor updateProcessor = Mockito.mock(UpdateProcessor.class);
         BotProperties botProperties = new BotProperties();
         botProperties.setUsername("Test_Bot-Hello_bot_AAAAA");
-        WebhookHandler webhookHandler = new WebhookHandler(botProperties, updateProcessor, sender) {
+        WebhookHandler webhookHandler = new WebhookHandler(botProperties, updateProcessor, sender,
+                new DefaultTelegramBotKafkaTopicConvention()) {
             @Override
             protected void processUpdate(Update update) {
             }
@@ -50,7 +53,8 @@ class WebhookHandlerTest {
         // given
         Sender sender = Mockito.mock(Sender.class);
         UpdateProcessor updateProcessor = Mockito.mock(UpdateProcessor.class);
-        WebhookHandler webhookHandler = new WebhookHandler(new BotProperties(), updateProcessor, sender) {
+        WebhookHandler webhookHandler = new WebhookHandler(new BotProperties(), updateProcessor, sender,
+                new DefaultTelegramBotKafkaTopicConvention()) {
             @Override
             protected void processUpdate(Update update) {
                 throw new RuntimeException("some ex");

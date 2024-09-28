@@ -14,6 +14,7 @@ import java.util.Map;
 @Setter
 @Getter
 public class WebhookProperties {
+    private boolean reactive;
     private boolean enabled;
     @NotBlank
     private String kafkaBrokers;
