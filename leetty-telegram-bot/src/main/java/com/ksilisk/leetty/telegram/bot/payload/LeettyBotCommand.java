@@ -18,6 +18,7 @@ public enum LeettyBotCommand {
     SETTINGS("/settings", SETTINGS_COMMAND),
     DAILY_QUESTION("/daily_question", DAILY_QUESTION_COMMAND),
     RANDOM_QUESTION("/random_question", RANDOM_QUESTION_COMMAND),
+    PROFILE("/profile", PROFILE_COMMAND),
     HELP("/help", HELP_COMMAND);
 
     private static final Map<String, LeettyBotCommand> COMMANDS_MAP =

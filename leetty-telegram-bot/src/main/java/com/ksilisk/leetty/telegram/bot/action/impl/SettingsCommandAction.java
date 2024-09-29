@@ -2,6 +2,7 @@ package com.ksilisk.leetty.telegram.bot.action.impl;
 
 import com.ksilisk.leetty.telegram.bot.action.LeettyAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
+import com.ksilisk.leetty.telegram.bot.keyboard.SettingsMessageInlineKeyboard;
 import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
 import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
@@ -30,7 +31,7 @@ public class SettingsCommandAction extends LeettyAction {
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text(messageSampleReader.read(SETTINGS_MESSAGE_SAMPLE_FILENAME))
-                .replyMarkup(getKeyboard())
+                .replyMarkup(SettingsMessageInlineKeyboard.create())
                 .build();
         sender.execute(sendMessage);
     }
@@ -38,15 +39,5 @@ public class SettingsCommandAction extends LeettyAction {
     @Override
     public LeettyBotEvent getEvent() {
         return LeettyBotEvent.SETTINGS_COMMAND;
-    }
-
-    private ReplyKeyboard getKeyboard() {
-        InlineKeyboardButton button = InlineKeyboardButton.builder()
-                .text("Auto sending daily question")
-                .callbackData(new CallbackData(UPDATE_SEND_DAILY_TIME).toString())
-                .build();
-        return InlineKeyboardMarkup.builder()
-                .keyboardRow(Collections.singletonList(button))
-                .build();
     }
 }

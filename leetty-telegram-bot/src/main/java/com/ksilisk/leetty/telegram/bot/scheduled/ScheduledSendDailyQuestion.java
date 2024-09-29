@@ -2,8 +2,8 @@ package com.ksilisk.leetty.telegram.bot.scheduled;
 
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.telegram.bot.config.LeettyProperties;
+import com.ksilisk.leetty.telegram.bot.service.ChatService;
 import com.ksilisk.leetty.telegram.bot.service.LeetCodeQuestionMessagePreparer;
-import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
 import com.ksilisk.leetty.telegram.bot.service.QuestionService;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
 import jakarta.annotation.PostConstruct;
@@ -25,11 +25,11 @@ import static com.ksilisk.leetty.telegram.bot.action.impl.UpdateSendDailyTimeAct
 @RequiredArgsConstructor
 public class ScheduledSendDailyQuestion implements Closeable {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private final LeettyFacade leettyFacade;
+    private final ChatService chatService;
     private final QuestionService questionService;
-    private final Sender sender;
     private final LeetCodeQuestionMessagePreparer leetCodeQuestionMessagePreparer;
     private final LeettyProperties leettyProperties;
+    private final Sender sender;
 
     @PostConstruct
     public void addTimesToSchedule() {
@@ -50,7 +50,7 @@ public class ScheduledSendDailyQuestion implements Closeable {
         log.info("Start sending daily questions!");
         try {
             DailyCodingQuestion dailyCodingQuestion = questionService.getDailyQuestion();
-            leettyFacade.getUsersToSendDailyQuestion(time).stream()
+            chatService.getUsersToSendDailyQuestion(time).stream()
                     .map(id -> leetCodeQuestionMessagePreparer.prepareMessage(dailyCodingQuestion.getQuestion(), id))
                     .forEach(sender::execute);
         } catch (Exception e) {

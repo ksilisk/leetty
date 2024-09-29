@@ -2,7 +2,7 @@ package com.ksilisk.leetty.telegram.bot.service.impl;
 
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.Question;
-import com.ksilisk.leetty.common.dto.question.*;
+import com.ksilisk.leetty.common.question.*;
 import com.ksilisk.leetty.telegram.bot.feign.QuestionClient;
 import com.ksilisk.leetty.telegram.bot.service.QuestionService;
 import com.ksilisk.leetty.telegram.bot.util.LeetCodeUrlParser;
@@ -29,7 +29,7 @@ class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question parseQuestionFromUrl(String url) {
-        String titleSlug = leetCodeUrlParser.getTitleSlug(url);
+        String titleSlug = leetCodeUrlParser.parseTitleSlug(url);
         return questionClient.getLeetCodeQuestion(titleSlug);
     }
 

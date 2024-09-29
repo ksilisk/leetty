@@ -3,7 +3,7 @@ package com.ksilisk.leetty.telegram.bot.action.impl;
 import com.ksilisk.leetty.telegram.bot.action.LeettyCallbackAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.payload.CallbackData;
-import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
+import com.ksilisk.leetty.telegram.bot.service.ChatService;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,12 +17,12 @@ public class SetSendDailyTimeAction extends LeettyCallbackAction {
     public static final String TIME_CALLBACK_DATA_KEY = "time";
 
     private final Sender sender;
-    private final LeettyFacade leettyFacade;
+    private final ChatService chatService;
 
     @Override
     public void handle(Update update, CallbackData callbackData) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
-        leettyFacade.updateTimeToSendDailyQuestion(callbackQuery.getMessage().getChatId(),
+        chatService.updateTimeToSendDailyQuestion(callbackQuery.getMessage().getChatId(),
                 callbackData.getKey(TIME_CALLBACK_DATA_KEY).toString());
         EditMessageText editMessageText = EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())

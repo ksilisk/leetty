@@ -16,7 +16,7 @@ class LeetCodeUrlParserImplTest {
         String testSlug = "test";
         String url = "leetcode.com/problem/" + testSlug;
         // when
-        String titleSlug = leetCodeUrlParser.getTitleSlug(url);
+        String titleSlug = leetCodeUrlParser.parseTitleSlug(url);
         // then
         assertEquals(testSlug, titleSlug);
     }
@@ -27,7 +27,7 @@ class LeetCodeUrlParserImplTest {
         String testSlug = "test";
         String url = "https://leetcode.com/problem/" + testSlug;
         // when
-        String titleSlug = leetCodeUrlParser.getTitleSlug(url);
+        String titleSlug = leetCodeUrlParser.parseTitleSlug(url);
         // then
         assertEquals(testSlug, titleSlug);
     }
@@ -38,7 +38,7 @@ class LeetCodeUrlParserImplTest {
         String testSlug = "test";
         String url = "http://leetcode.com/problem/" + testSlug;
         // when
-        String titleSlug = leetCodeUrlParser.getTitleSlug(url);
+        String titleSlug = leetCodeUrlParser.parseTitleSlug(url);
         // then
         assertEquals(testSlug, titleSlug);
     }
@@ -49,7 +49,7 @@ class LeetCodeUrlParserImplTest {
         String testSlug = "test";
         String url = "http://leetcode.com/problem/" + testSlug + "/fjsjj/sdfjksdajfk/sdjfksajdfksja/sdjfkdasjkf";
         // when
-        String titleSlug = leetCodeUrlParser.getTitleSlug(url);
+        String titleSlug = leetCodeUrlParser.parseTitleSlug(url);
         // then
         assertEquals(testSlug, titleSlug);
     }
@@ -59,7 +59,7 @@ class LeetCodeUrlParserImplTest {
         // given
         String url = "";
         // then
-        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.getTitleSlug(url));
+        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.parseTitleSlug(url));
     }
 
     @Test
@@ -68,7 +68,7 @@ class LeetCodeUrlParserImplTest {
         String testSlug = "test";
         String url = "http://leetcodef.com/problem/" + testSlug;
         // then
-        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.getTitleSlug(url));
+        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.parseTitleSlug(url));
     }
 
     @Test
@@ -77,7 +77,7 @@ class LeetCodeUrlParserImplTest {
         String testSlug = "test";
         String url = "httssp://leetcode.com/problem/" + testSlug;
         // then
-        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.getTitleSlug(url));
+        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.parseTitleSlug(url));
     }
 
     @Test
@@ -85,7 +85,7 @@ class LeetCodeUrlParserImplTest {
         // given
         String url = "/f .f/ /sfj/35 53 9asfas /. ...fajsklfjhsjgjkfshgjkshjgkhsakjhdkjfjk";
         // then
-        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.getTitleSlug(url));
+        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.parseTitleSlug(url));
     }
 
     @Test
@@ -93,7 +93,7 @@ class LeetCodeUrlParserImplTest {
         // given
         String url = "http://leetcode.com/problem";
         // then
-        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.getTitleSlug(url));
+        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.parseTitleSlug(url));
     }
 
     @Test
@@ -101,6 +101,6 @@ class LeetCodeUrlParserImplTest {
         // given
         String url = "http://leetcode.com/problem//";
         // then
-        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.getTitleSlug(url));
+        assertThrowsExactly(LeetCodeValidationUrlException.class, () -> leetCodeUrlParser.parseTitleSlug(url));
     }
 }

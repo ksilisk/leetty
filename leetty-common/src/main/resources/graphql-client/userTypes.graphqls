@@ -1,0 +1,217 @@
+# AKA UserNode
+type User
+{
+    username: String
+    firstName: String
+    lastName: String
+    isActive: String
+    isCurrentUserPremium: Boolean
+    isCurrentUserVerified: Boolean
+    profile: UserProfile
+    hasUsablePassword: Boolean
+    hasChangedUsernameRecently: Boolean
+    email: String
+    emails: Email
+    phone: String
+    isDiscussAdmin: Boolean
+    isDiscussStaff: Boolean
+    submitStats: UserSubmitStats
+    submitStatsGlobal: UserSubmitStats
+    problemsSolvedBeatsStats: ProblemSolvedBeats
+    submissionCalendar: String
+    contributions: UserContribution
+    activeBadge: UserBadge
+    contestBadge: UserBadge
+    badges: [UserBadge]
+    upcomingBadges: [UpcomingBadge]
+    nameColor: String
+    id: String
+    userCalendar: UserCalendar
+    yearJoined: Int
+    joinedTimestamp: Int
+    languageProblemCount: [LanguageProblemCount]
+    tagProblemCounts: TagProblemCountsCategory
+    githubUrl: String
+    linkedinUrl: String
+    twitterUrl: String
+}
+
+# AKA UserProfileNode
+type UserProfile
+{
+    userSlug: String
+    realName: String
+    birthday: String
+    aboutMe: String
+    #    occupation: UserProfileOccupation -> now skip because not need
+    #    country: UserProfileCountry -> now skip because not need
+    lastModified: String
+    countryName: String
+    countryCode: String
+    userAvatar: String
+    location: String
+    gender: String
+    privacyContact: Boolean
+    websites: [String]
+    rewardStats: String
+    skillTags: [String]
+    age: Int
+    education: String
+    school: String
+    company: String
+    jobTitle: String
+    yearsOfExperience: Int
+    ranking: Int
+    globalRanking: Int
+    contestCount: Int
+    acStats: AcStats
+    starRating: Float
+    publicBadgeType: Int
+    postViewCount: Int
+    postViewCountDiff: Int
+    solutionCount: Int
+    solutionCountDiff: Int
+    categoryDiscussCount: Int
+    categoryDiscussCountDiff: Int
+    reputation: Int
+    reputationDiff: Int
+    joinStudyPlanLeaderboard: Boolean
+    displayMySubmissionHistory: Boolean
+}
+
+# AKA ProblemSolvedBeatsNode
+type ProblemSolvedBeats
+{
+    difficulty: String
+    percentage: Float
+}
+
+# AKA UserBadgeNode
+type UserBadge
+{
+    id: String
+    #    user: PrivateContestUser -> now skip because not need
+    creationDate: String
+    updationDate: String
+    #    badge: BadgeBadge -> now skip because not need
+    expiredDate: String
+    name: String
+    icon: String
+    shortName: String
+    displayName: String
+    #    medal: MedalNode -> now skip because not need
+    expired: Boolean
+    userCount: Int
+    #    category: BadgeCategoryEnum -> now skip because not need
+    hoverText: String
+}
+
+# AKA AcStatsNode
+type AcStats
+{
+    acQuestionCount: Int
+    acSubmissionCount: Int
+    totalSubmissionCount: Int
+    acRate: Int
+}
+
+# AKA TagProblemCountsCategoryNode
+type TagProblemCountsCategory
+{
+    advanced: TagProblemsCount
+    intermediate: TagProblemsCount
+    fundamental: TagProblemsCount
+}
+
+# AKA UserCalendarNode
+type UserCalendar
+{
+    user: User
+    #    activeYears: ? -> now skip because not need
+    submissionCalendar: String
+    streak: Int
+    totalActiveDays: Int
+    #    dccBadges: ? -> now skip because not need
+}
+
+# AKA UserSubmitStatsNode
+type UserSubmitStats
+{
+    acSubmissionNum: [SubmissionCount]
+    totalSubmissionNum: [SubmissionCount]
+}
+
+type SubmissionCount
+{
+    difficulty: String
+    submissions: Int
+    count: Int
+}
+
+# AKA UserContributionNode
+type UserContribution
+{
+    points: Int
+    questionCount: Int
+    testcaseCount: Int
+}
+
+# AKA EmailNode
+type Email
+{
+    email: String
+    verified: Boolean
+    primary: Boolean
+}
+
+# AKA TagProblemsCountNode
+type TagProblemsCount
+{
+    tagName: String
+    problemsSolved: Int
+    tagSlug: String
+}
+
+# AKA LanguageProblemCountNode
+type LanguageProblemCount
+{
+    languageName: String
+    problemsSolved: Int
+}
+
+# AKA UpcomingBadgeNode
+type UpcomingBadge
+{
+    name: String
+    icon: String
+    progress: Int
+}
+
+# AKA UserQuestionProgressNodeV2
+type UserQuestionProgress
+{
+    numAcceptedQuestions: [QuestionCount]
+    numFailedQuestions: [QuestionCount]
+    numUntouchedQuestions: [QuestionCount]
+    userSessionBeatsPercentage: [LevelBeatPercentageMixin]
+}
+
+# AKA QuestionCountNode
+type QuestionCount
+{
+    difficulty: DifficultyDescribedEnum
+    count: Int
+}
+
+type LevelBeatPercentageMixin
+{
+    difficulty: DifficultyDescribedEnum
+    percentage: Float
+}
+
+enum DifficultyDescribedEnum
+{
+    EASY
+    MEDIUM
+    HARD
+}

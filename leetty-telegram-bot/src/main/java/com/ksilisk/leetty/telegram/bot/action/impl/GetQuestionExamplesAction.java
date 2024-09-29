@@ -1,6 +1,6 @@
 package com.ksilisk.leetty.telegram.bot.action.impl;
 
-import com.ksilisk.leetty.common.dto.question.QuestionContent;
+import com.ksilisk.leetty.common.question.QuestionContent;
 import com.ksilisk.leetty.telegram.bot.action.LeettyCallbackAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.keyboard.QuestionMessageInlineKeyboard;
@@ -34,7 +34,7 @@ public class GetQuestionExamplesAction extends LeettyCallbackAction {
     public void handle(Update update, CallbackData callbackData) {
         Message message = (Message) update.getCallbackQuery().getMessage();
         String questionUrl = QuestionMessageInlineKeyboard.getLeetCodeUrlFromKeyboard(message.getReplyMarkup());
-        String questionTitleSlug = urlParser.getTitleSlug(questionUrl);
+        String questionTitleSlug = urlParser.parseTitleSlug(questionUrl);
         QuestionContent questionContent = questionService.getContent(questionTitleSlug);
         List<String> examples = contentParser.parseExamples(questionContent.content());
         InlineKeyboardMarkup keyboardMarkup = message.getReplyMarkup();

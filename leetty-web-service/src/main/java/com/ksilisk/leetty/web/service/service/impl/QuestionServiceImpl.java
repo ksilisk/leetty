@@ -5,8 +5,9 @@ import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.Question;
 import com.ksilisk.leetty.common.codegen.types.QuestionListFilterInput;
 import com.ksilisk.leetty.common.codegen.types.TopicTag;
-import com.ksilisk.leetty.common.dto.question.*;
+import com.ksilisk.leetty.common.question.*;
 import com.ksilisk.leetty.web.service.client.graphql.GraphQLLeetCodeClient;
+import com.ksilisk.leetty.web.service.exception.LeettyWebServiceException;
 import com.ksilisk.leetty.web.service.exception.type.QuestionNotFoundException;
 import com.ksilisk.leetty.web.service.service.QuestionService;
 import com.netflix.graphql.dgs.client.codegen.BaseSubProjectionNode;
@@ -43,7 +44,8 @@ class QuestionServiceImpl implements QuestionService {
             BaseSubProjectionNode<?, ?> randomQuestionProjectionNode = new RandomQuestionProjectionRoot<>()
                     .difficulty().title().content().questionFrontendId().acRate().titleSlug().likes().dislikes().questionDetailUrl()
                     .topicTags().name();
-            randomQuestion = leetCodeClient.execute(randomQuestionQuery, randomQuestionProjectionNode, Question.class);
+            randomQuestion = leetCodeClient.execute(randomQuestionQuery, randomQuestionProjectionNode, Question.class)
+                    .orElseThrow(LeettyWebServiceException::new);
             if (randomQuestion.getContent() == null) {
                 log.info("Handled question without content. QuestionTitleSlug: {}. Retry request.", randomQuestion.getTitleSlug());
             }
@@ -58,7 +60,8 @@ class QuestionServiceImpl implements QuestionService {
                 .link()
                 .question().difficulty().title().content().questionFrontendId().acRate().titleSlug().likes().dislikes().hints()
                 .topicTags().name();
-        return leetCodeClient.execute(dailyQuestionQuery, dailyQuestionProjectionNode, DailyCodingQuestion.class);
+        return leetCodeClient.execute(dailyQuestionQuery, dailyQuestionProjectionNode, DailyCodingQuestion.class)
+                .orElseThrow(LeettyWebServiceException::new);
     }
 
     @Override
@@ -97,10 +100,7 @@ class QuestionServiceImpl implements QuestionService {
 
     private Question fetchQuestionProjection(String titleSlug, BaseSubProjectionNode<?, ?> questionProjectionNode) {
         GraphQLQuery questionQuery = QuestionGraphQLQuery.newRequest().titleSlug(titleSlug).build();
-        Question question = leetCodeClient.execute(questionQuery, questionProjectionNode, Question.class);
-        if (question == null) {
-            throw new QuestionNotFoundException("Question with titleSlug not found. TitleSlug: " + questionQuery);
-        }
-        return question;
+        return leetCodeClient.execute(questionQuery, questionProjectionNode, Question.class)
+                .orElseThrow(() -> new QuestionNotFoundException("Question with titleSlug not found. TitleSlug: " + questionQuery));
     }
 }
