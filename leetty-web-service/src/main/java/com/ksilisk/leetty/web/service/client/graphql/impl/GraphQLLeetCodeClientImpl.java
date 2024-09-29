@@ -8,14 +8,16 @@ import com.netflix.graphql.dgs.client.codegen.GraphQLQuery;
 import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public class GraphQLLeetCodeClientImpl implements GraphQLLeetCodeClient {
     private final GraphQLClient client;
 
     @Override
-    public <T> T execute(GraphQLQuery query, BaseSubProjectionNode<?, ?> projection, Class<T> clazz) {
+    public <T> Optional<T> execute(GraphQLQuery query, BaseSubProjectionNode<?, ?> projection, Class<T> clazz) {
         GraphQLQueryRequest request = new GraphQLQueryRequest(query, projection);
         GraphQLResponse response = client.executeQuery(request.serialize());
-        return response.extractValueAsObject(query.getOperationName(), clazz);
+        return Optional.ofNullable(response.extractValueAsObject(query.getOperationName(), clazz));
     }
 }

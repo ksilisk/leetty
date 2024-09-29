@@ -13,19 +13,28 @@ import java.net.URL;
 public class LeetCodeUrlParserImpl implements LeetCodeUrlParser {
     private static final String HTTPS_PROTOCOL_PREFIX = "https://";
     private static final String HTTP_PROTOCOL_PREFIX = "http://";
-
     private static final String LEETCODE_HOST = "leetcode.com";
 
+
     @Override
-    public String getTitleSlug(String url) {
-        validateUrl(url);
-        return url.replace(HTTP_PROTOCOL_PREFIX, "")
-                .replace(HTTPS_PROTOCOL_PREFIX, "")
-                .replace(LEETCODE_HOST, "")
-                .split("/")[2];
+    public String parseTitleSlug(String url) {
+        String[] urlPath = validateAndGetUrlPath(url);
+        if (urlPath.length <= 2 || !StringUtils.hasText(urlPath[2])) {
+            throw new LeetCodeValidationUrlException("Incorrect url path to title slug");
+        }
+        return urlPath[2];
     }
 
-    private void validateUrl(String url) {
+    @Override
+    public String parseUsername(String url) {
+        String[] urlPath = validateAndGetUrlPath(url);
+        if (urlPath.length <= 2 || !"u".equals(urlPath[1])) {
+            throw new LeetCodeValidationUrlException("Incorrect url path to username");
+        }
+        return urlPath[2].toLowerCase();
+    }
+
+    private String[] validateAndGetUrlPath(String url) {
         try {
             if (!StringUtils.hasText(url)) {
                 throw new LeetCodeValidationUrlException("Url should has text");
@@ -37,10 +46,8 @@ public class LeetCodeUrlParserImpl implements LeetCodeUrlParser {
             if (!leetCodeUrl.getHost().equals(LEETCODE_HOST)) {
                 throw new LeetCodeValidationUrlException("Incorrect leetcode host");
             }
-            String[] urlPath = leetCodeUrl.getFile().split("/");
-            if (urlPath.length <= 2 || !StringUtils.hasText(urlPath[2])) {
-                throw new LeetCodeValidationUrlException("Incorrect url path to title slug");
-            }
+            return leetCodeUrl.getFile().split("/");
+
         } catch (LeetCodeValidationUrlException ex) {
             throw ex;
         } catch (Exception ex) {

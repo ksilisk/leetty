@@ -1,6 +1,6 @@
 package com.ksilisk.leetty.telegram.bot.action.impl;
 
-import com.ksilisk.leetty.common.dto.question.QuestionDifficulty;
+import com.ksilisk.leetty.common.question.QuestionDifficulty;
 import com.ksilisk.leetty.telegram.bot.action.LeettyCallbackAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
 import com.ksilisk.leetty.telegram.bot.keyboard.QuestionMessageInlineKeyboard;
@@ -32,7 +32,7 @@ public class GetQuestionDifficultyAction extends LeettyCallbackAction {
     public void handle(Update update, CallbackData callbackData) {
         Message message = (Message) update.getCallbackQuery().getMessage();
         String questionUrl = QuestionMessageInlineKeyboard.getLeetCodeUrlFromKeyboard(message.getReplyMarkup());
-        String questionTitleSlug = urlParser.getTitleSlug(questionUrl);
+        String questionTitleSlug = urlParser.parseTitleSlug(questionUrl);
         QuestionDifficulty questionDifficulty = questionService.getDifficulty(questionTitleSlug);
         InlineKeyboardMarkup keyboardMarkup = message.getReplyMarkup();
         QuestionMessageInlineKeyboard.removeButton(keyboardMarkup, DIFFICULTY_BUTTON_TEXT);

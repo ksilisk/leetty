@@ -10,7 +10,7 @@ class StartCommandActionTest {
     @Test
     void getEvent_shouldReturnValidEvent() {
         // given
-        StartCommandAction startCommandAction = new StartCommandAction(null, null, null);
+        StartCommandAction startCommandAction = new StartCommandAction(null, null, null, null);
         // when
         LeettyBotEvent event = startCommandAction.getEvent();
         // then

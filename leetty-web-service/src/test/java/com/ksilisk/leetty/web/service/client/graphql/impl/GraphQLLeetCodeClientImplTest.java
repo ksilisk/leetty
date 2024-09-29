@@ -28,7 +28,7 @@ class GraphQLLeetCodeClientImplTest {
         Mockito.when(restClient.executeQuery(ArgumentMatchers.anyString())).then((Answer<GraphQLResponse>) invocation -> response);
         // when
         DailyCodingQuestion executeResult = leetCodeClient.execute(ActiveDailyCodingChallengeQuestionGraphQLQuery.newRequest().build(),
-                new ActiveDailyCodingChallengeQuestionProjectionRoot<>().date().userStatus().link(), DailyCodingQuestion.class);
+                new ActiveDailyCodingChallengeQuestionProjectionRoot<>().date().userStatus().link(), DailyCodingQuestion.class).get();
         // then
         Assertions.assertEquals(question, executeResult);
     }

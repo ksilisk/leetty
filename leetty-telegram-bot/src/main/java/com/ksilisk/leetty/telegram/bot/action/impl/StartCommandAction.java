@@ -2,7 +2,8 @@ package com.ksilisk.leetty.telegram.bot.action.impl;
 
 import com.ksilisk.leetty.telegram.bot.action.LeettyAction;
 import com.ksilisk.leetty.telegram.bot.event.LeettyBotEvent;
-import com.ksilisk.leetty.telegram.bot.service.LeettyFacade;
+import com.ksilisk.leetty.telegram.bot.service.ChatService;
+import com.ksilisk.leetty.telegram.bot.service.UserService;
 import com.ksilisk.leetty.telegram.bot.util.MessageSampleReader;
 import com.ksilisk.telegram.bot.starter.sender.Sender;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +19,14 @@ public class StartCommandAction extends LeettyAction {
 
     private final Sender sender;
     private final MessageSampleReader messageSampleReader;
-    private final LeettyFacade botService;
+    private final ChatService chatService;
+    private final UserService userService;
 
     @Override
     public void handle(Update update) {
         Message message = update.getMessage();
-        botService.addChat(message.getChat());
-        botService.addUser(message.getFrom());
+        chatService.addChat(message.getChat());
+        userService.addUser(message.getFrom());
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(message.getChatId())
                 .text(messageSampleReader.read(START_MESSAGE_SAMPLE_FILENAME))
