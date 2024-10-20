@@ -20,6 +20,52 @@ public class QuestionMessageInlineKeyboard {
     public static final String TOPICS_BUTTON_TEXT = "Topics";
     public static final String HINTS_BUTTON_TEXT = "Hints";
 
+    public static InlineKeyboardMarkup forQuestion(Question question) {
+        List<InlineKeyboardButton> firstRow = List.of(
+                InlineKeyboardButton.builder()
+                        .callbackData(new CallbackData(GET_QUESTION_EXAMPLES).toString())
+                        .text(EXAMPLES_BUTTON_TEXT)
+                        .build(),
+                InlineKeyboardButton.builder()
+                        .callbackData(new CallbackData(GET_QUESTION_CONSTRAINTS).toString())
+                        .text(CONSTRAINTS_BUTTON_TEXT)
+                        .build());
+
+        List<InlineKeyboardButton> secondRow = List.of(
+                InlineKeyboardButton.builder()
+                        .callbackData(new CallbackData(GET_QUESTION_DIFFICULTY).toString())
+                        .text(DIFFICULTY_BUTTON_TEXT)
+                        .build(),
+                InlineKeyboardButton.builder()
+                        .callbackData(new CallbackData(GET_QUESTION_ACCEPTANCE).toString())
+                        .text(ACCEPTANCE_BUTTON_TEXT)
+                        .build());
+
+        List<InlineKeyboardButton> thirdRow = new ArrayList<>();
+        thirdRow.add(InlineKeyboardButton.builder()
+                .callbackData(new CallbackData(GET_QUESTION_TOPICS).toString())
+                .text(TOPICS_BUTTON_TEXT)
+                .build());
+        if (question.getHints() != null && !question.getHints().isEmpty()) {
+            thirdRow.add(InlineKeyboardButton.builder()
+                    .callbackData(new CallbackData(GET_QUESTION_HINTS).toString())
+                    .text(HINTS_BUTTON_TEXT)
+                    .build());
+        }
+        List<InlineKeyboardButton> fourthRow = List.of(
+                InlineKeyboardButton.builder()
+                        .text("Open at LeetCode")
+                        .url(String.format(LEETCODE_QUESTION_URL_FORMAT, question.getTitleSlug()))
+                        .build());
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(firstRow)
+                .keyboardRow(secondRow)
+                .keyboardRow(thirdRow)
+                .keyboardRow(fourthRow)
+                .build();
+    }
+
     public static String getLeetCodeUrlFromKeyboard(InlineKeyboardMarkup keyboardMarkup) {
         List<List<InlineKeyboardButton>> keyboard = keyboardMarkup.getKeyboard();
         return keyboard.get(keyboard.size() - 1).get(0).getUrl();
@@ -38,48 +84,5 @@ public class QuestionMessageInlineKeyboard {
                 return;
             }
         }
-    }
-
-    public static InlineKeyboardMarkup forQuestion(Question question) {
-        List<InlineKeyboardButton> firstRow = List.of(
-                InlineKeyboardButton.builder()
-                        .callbackData(new CallbackData(GET_QUESTION_EXAMPLES).toString())
-                        .text(EXAMPLES_BUTTON_TEXT)
-                        .build(),
-                InlineKeyboardButton.builder()
-                        .callbackData(new CallbackData(GET_QUESTION_CONSTRAINTS).toString())
-                        .text(CONSTRAINTS_BUTTON_TEXT)
-                        .build());
-        List<InlineKeyboardButton> secondRow = List.of(
-                InlineKeyboardButton.builder()
-                        .callbackData(new CallbackData(GET_QUESTION_DIFFICULTY).toString())
-                        .text(DIFFICULTY_BUTTON_TEXT)
-                        .build(),
-                InlineKeyboardButton.builder()
-                        .callbackData(new CallbackData(GET_QUESTION_ACCEPTANCE).toString())
-                        .text(ACCEPTANCE_BUTTON_TEXT)
-                        .build());
-        List<InlineKeyboardButton> thirdRow = new ArrayList<>();
-        thirdRow.add(InlineKeyboardButton.builder()
-                .callbackData(new CallbackData(GET_QUESTION_TOPICS).toString())
-                .text(TOPICS_BUTTON_TEXT)
-                .build());
-        if (question.getHints() != null && question.getHints().size() > 0) {
-            thirdRow.add(InlineKeyboardButton.builder()
-                    .callbackData(new CallbackData(GET_QUESTION_HINTS).toString())
-                    .text(HINTS_BUTTON_TEXT)
-                    .build());
-        }
-        List<InlineKeyboardButton> fourthRow = List.of(
-                InlineKeyboardButton.builder()
-                        .text("Open at LeetCode")
-                        .url(String.format(LEETCODE_QUESTION_URL_FORMAT, question.getTitleSlug()))
-                        .build());
-        return InlineKeyboardMarkup.builder()
-                .keyboardRow(firstRow)
-                .keyboardRow(secondRow)
-                .keyboardRow(thirdRow)
-                .keyboardRow(fourthRow)
-                .build();
     }
 }

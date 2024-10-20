@@ -2,6 +2,7 @@ package com.ksilisk.leetty.web.service.exception;
 
 import com.ksilisk.leetty.web.service.exception.type.EntityAlreadyExistsException;
 import com.ksilisk.leetty.web.service.exception.type.EntityNotFoundException;
+import com.ksilisk.leetty.web.service.exception.type.LeettyRequestValidationException;
 import com.ksilisk.leetty.web.service.exception.type.QuestionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn("Handled question not found exception. Request Details: {}", webRequest.getDescription(true), ex);
         ProblemDetail body = createProblemDetail(ex, HttpStatus.NOT_FOUND, ex.getMessage(), null, null, webRequest);
         return createResponseEntity(body, null, HttpStatus.NOT_FOUND, webRequest);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(LeettyRequestValidationException.class)
+    public ResponseEntity<Object> handleLeettyRequestValidation(Exception ex, WebRequest webRequest) {
+        log.warn("Handled leetty request validation exception. Request Details: {}", webRequest.getDescription(true), ex);
+        ProblemDetail body = createProblemDetail(ex, HttpStatus.BAD_REQUEST, ex.getMessage(), null, null, webRequest);
+        return createResponseEntity(body, null, HttpStatus.BAD_REQUEST, webRequest);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)

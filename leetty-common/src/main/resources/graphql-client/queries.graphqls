@@ -9,4 +9,6 @@ type Query {
     activeDailyCodingChallengeQuestion: DailyCodingQuestion
     question(titleSlug: String): Question
     randomQuestion(categorySlug: String, filters: QuestionListFilterInput): Question
+    matchedUser(username: String): User
+    userProfileUserQuestionProgressV2(userSlug: String): UserQuestionProgress
 }

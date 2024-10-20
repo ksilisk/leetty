@@ -1,4 +1,4 @@
-package com.ksilisk.leetty.common.dto.question;
+package com.ksilisk.leetty.common.question;
 
 public record QuestionAcceptance(Double acceptance) {
 }

@@ -6,7 +6,7 @@ import com.ksilisk.leetty.common.codegen.client.RandomQuestionGraphQLQuery;
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.Question;
 import com.ksilisk.leetty.common.codegen.types.TopicTag;
-import com.ksilisk.leetty.common.dto.question.*;
+import com.ksilisk.leetty.common.question.*;
 import com.ksilisk.leetty.web.service.client.graphql.GraphQLLeetCodeClient;
 import com.ksilisk.leetty.web.service.client.graphql.impl.GraphQLLeetCodeClientImpl;
 import com.ksilisk.leetty.web.service.exception.type.QuestionNotFoundException;
@@ -17,6 +17,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +41,7 @@ class QuestionServiceImplTest {
                         ArgumentMatchers.isA(RandomQuestionGraphQLQuery.class),
                         ArgumentMatchers.isA(BaseSubProjectionNode.class),
                         ArgumentMatchers.eq(Question.class)))
-                .thenReturn(withoutContent, expectedQuestionWithContent);
+                .thenReturn(Optional.of(withoutContent), Optional.of(expectedQuestionWithContent));
         // when
         Question actualQuestion = questionService.getRandomQuestion("testSlug");
         // then
@@ -56,7 +57,7 @@ class QuestionServiceImplTest {
                         ArgumentMatchers.isA(RandomQuestionGraphQLQuery.class),
                         ArgumentMatchers.isA(BaseSubProjectionNode.class),
                         ArgumentMatchers.eq(Question.class)))
-                .thenReturn(expectedRandomQuestion);
+                .thenReturn(Optional.of(expectedRandomQuestion));
         // when
         Question actualRandomQuestion = questionService.getRandomQuestion("testSlug");
         // then
@@ -71,7 +72,7 @@ class QuestionServiceImplTest {
                         ArgumentMatchers.isA(ActiveDailyCodingChallengeQuestionGraphQLQuery.class),
                         ArgumentMatchers.isA(BaseSubProjectionNode.class),
                         ArgumentMatchers.eq(DailyCodingQuestion.class)))
-                .thenReturn(expectedQuestion);
+                .thenReturn(Optional.of(expectedQuestion));
         // when
         DailyCodingQuestion actualQuestion = questionService.getDailyQuestions();
         // then
@@ -216,6 +217,6 @@ class QuestionServiceImplTest {
                         ArgumentMatchers.isA(QuestionGraphQLQuery.class),
                         ArgumentMatchers.isA(BaseSubProjectionNode.class),
                         ArgumentMatchers.eq(Question.class)))
-                .thenReturn(returnQuestion);
+                .thenReturn(Optional.ofNullable(returnQuestion));
     }
 }

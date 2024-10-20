@@ -1,0 +1,3 @@
+LeetCode profile successfully added!
+
+Try command: /profile

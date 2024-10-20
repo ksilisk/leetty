@@ -1,0 +1,2 @@
+Not found LeetCode user.
+Please, make sure you entered the correct LeetCode profile url and try again!

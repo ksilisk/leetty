@@ -1,24 +1,27 @@
 package com.ksilisk.leetty.web.service.service.impl;
 
 import com.ksilisk.leetty.common.dto.UserDto;
+import com.ksilisk.leetty.web.service.client.graphql.GraphQLLeetCodeClient;
 import com.ksilisk.leetty.web.service.entity.User;
 import com.ksilisk.leetty.web.service.exception.type.EntityNotFoundException.UserNotFountException;
 import com.ksilisk.leetty.web.service.repository.UserRepository;
 import com.ksilisk.leetty.web.service.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 class UserServiceImplTest {
+    final GraphQLLeetCodeClient leetCodeClient = Mockito.mock(GraphQLLeetCodeClient.class);
     final UserRepository userRepository;
     final UserService userService;
 
     @Autowired
     public UserServiceImplTest(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userService = new UserServiceImpl(userRepository);
+        this.userService = new UserServiceImpl(userRepository, leetCodeClient);
     }
 
     @Test

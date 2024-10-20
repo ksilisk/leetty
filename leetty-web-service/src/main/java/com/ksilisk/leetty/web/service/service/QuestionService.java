@@ -2,7 +2,7 @@ package com.ksilisk.leetty.web.service.service;
 
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.Question;
-import com.ksilisk.leetty.common.dto.question.*;
+import com.ksilisk.leetty.common.question.*;
 
 public interface QuestionService {
     Question getQuestion(String titleSlug);

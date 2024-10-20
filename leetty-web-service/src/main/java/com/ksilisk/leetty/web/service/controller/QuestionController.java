@@ -2,7 +2,7 @@ package com.ksilisk.leetty.web.service.controller;
 
 import com.ksilisk.leetty.common.codegen.types.DailyCodingQuestion;
 import com.ksilisk.leetty.common.codegen.types.Question;
-import com.ksilisk.leetty.common.dto.question.*;
+import com.ksilisk.leetty.common.question.*;
 import com.ksilisk.leetty.web.service.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
