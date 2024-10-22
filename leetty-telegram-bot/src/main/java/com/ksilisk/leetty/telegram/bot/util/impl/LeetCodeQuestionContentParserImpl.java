@@ -71,6 +71,7 @@ class LeetCodeQuestionContentParserImpl implements LeetCodeQuestionContentParser
                 .replaceAll("<sup>", "^").replaceAll("&nbsp;", " ")
                 .replaceAll("&lt;", "<").replaceAll("&gt;", ">")
                 .replaceAll("&amp;", "&").replaceAll("&quot;", "\"")
+                .replaceAll("&#39;", "'")
                 .replaceAll("<sub>", "(").replaceAll("</sub>", ")");
     }
 }
