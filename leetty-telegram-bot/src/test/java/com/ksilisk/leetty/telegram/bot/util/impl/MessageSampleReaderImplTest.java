@@ -58,4 +58,23 @@ class MessageSampleReaderImplTest {
         // then
         Assertions.assertThrowsExactly(IllegalStateException.class, () -> messageSampleReader.read("some_file.txt"));
     }
+
+    @Test
+    void readModificatedFile_shouldRereadFile() throws IOException {
+        // given
+        LeettyProperties leettyProperties = new LeettyProperties();
+        leettyProperties.setMessagesSamplesPath(tempDir.toString());
+        MessageSampleReader messageSampleReader = new MessageSampleReaderImpl(leettyProperties);
+        String firstReadExpectedString = "Test message sample!";
+        String secondReadExpectedString = "Second Test message sample!";
+        Path resolve = tempDir.resolve(TEST_EXISTS_FILE_NAME);
+        Files.write(resolve, firstReadExpectedString.getBytes());
+        // when
+        String firstReadSample = messageSampleReader.read(TEST_EXISTS_FILE_NAME);
+        Files.write(resolve, secondReadExpectedString.getBytes());
+        String secondReadSample = messageSampleReader.read(TEST_EXISTS_FILE_NAME);
+        // then
+        Assertions.assertEquals(firstReadExpectedString, firstReadSample);
+        Assertions.assertEquals(secondReadExpectedString, secondReadSample);
+    }
 }
