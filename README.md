@@ -74,7 +74,7 @@ It interacts with [LeetCode](https://leetcode.com) using GraphQL, stores user da
 ### leetty-gateway
 `leetty-gateway` - is a Golang-service implemented as a gateway between Nginx and Apache Kafka.
 
-This service will be used if you will use Webhook-schema to receive updates from Telegam.
+This service will be used if you use Webhook-schema to receive updates from Telegam.
 
 #### Tech Stack
 - Golang
