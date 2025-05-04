@@ -13,17 +13,64 @@
 
 This project was started as my bachelor's degree final project.
 
-You also can read more about it by following the link: [graduate-work-rus-lang](https://docs.google.com/document/d/1ImOsaW_-6R2gidV9Cxh06JHzzyZZEYlQ/edit?usp=sharing&ouid=100798249487840626524&rtpof=true&sd=true)
+You also can read more about it by following the link: [graduate-work-rus-lang](https://docs.google.com/document/d/1ImOsaW_-6R2gidV9Cxh06JHzzyZZEYlQ/edit?usp=sharing&ouid=100798249487840626524&rtpof=true&sd=true) _(still in progress)_
 
 **_I may translate it to English someday :)_**
 ## Architecture
 ![leetty-architecture](docs/leetty-architecture.png)
 ### leetty-auth-service
-**_in progress_**
+`leetty-auth-service` - is a Java-service that provides secure communication between `leetty-telegram-bot` instances and `leetty-web-service`.
+
+It uses OAuth2 protocol, in particularly [Client Credentials Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow), for M2M (Machine-2-Machine) communication.
+
+#### Tech Stack
+- Java 17
+- Docker
+- Sprint Boot
+  - Actuator
+  - Micrometer
+  - OAuth2 Authorization Server
+  - Security
+- Lombok
 ### leetty-web-service
-**_in progress_**
+`leetty-web-service` - is a Java-service that is the main backend of `Leetty`.
+
+It interacts with [LeetCode](https://leetcode.com) using GraphQL, stores user data to PostgreSQL and makes major computation.
+
+#### Tech Stack
+- Java 17
+- Docker
+- Spring Boot
+  - Actuator
+  - Micrometer
+  - Data JPA
+  - OAuth2 Resource Server
+  - Web
+  - Security
+- [Netflix DGS Framework](https://netflix.github.io/dgs)
+- Flyway
+- PostgreSQL
+- H2
+- Lombok
 ### leetty-telegram-bot
-**_in progress_**
+`leetty-telegram-bot` - is a Java-service that interacts with Telegam updates. It uses Redis as an in-memory DB for store cache date, such as user states and callback data.
+
+#### Tech Stack
+- Java 17
+- Docker
+- Spring Boot
+  - Actuator
+  - Micrometer
+  - Cloud Open Feign
+  - OAuth2 Client
+  - Security
+  - Web
+  - State Machine
+  - Data Redis
+  - Kafka
+- Flyway
+- Lombok
+- Redis
 ### leetty-gateway
 `leetty-gateway` - is a Golang-service implemented as a gateway between Nginx and Apache Kafka.
 
