@@ -13,7 +13,7 @@
 
 This project was started as my bachelor's degree final project.
 
-You also can read more about it by following the link: [graduate-work-rus-lang](https://docs.google.com/document/d/1ImOsaW_-6R2gidV9Cxh06JHzzyZZEYlQ/edit?usp=sharing&ouid=100798249487840626524&rtpof=true&sd=true) _(still in progress)_
+You also can read more about it by following the link: [graduate-work-rus-lang](https://docs.google.com/document/d/1ImOsaW_-6R2gidV9Cxh06JHzzyZZEYlQ/edit?usp=sharing&ouid=100798249487840626524&rtpof=true&sd=true)
 
 **_I may translate it to English someday :)_**
 ## Architecture
@@ -107,4 +107,10 @@ Yes, you can.
   - Deployment process, which I implemented using GitHub actions, may help you - [here](.github/workflows/deploy.yml)
 - Run it on remote server and enjoy!
 ## Afterword
-**_in progress_**
+Finally, it took me about one year to develop this project.
+
+I learnt wide range new information about how to create, support, deploy and architect applications using actual technologies and approaches.
+
+Also, this project took the highest grade after the presentation at my university.
+
+After all, `Leetty` - is a project that helped me to go deeper into computer science and increase my knowledge.
